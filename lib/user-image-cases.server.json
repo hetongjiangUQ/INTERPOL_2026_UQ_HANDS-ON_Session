@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-09-28T06:12:38.636474+00:00",
+  "source": {
+    "status": "Creator authorization recorded 29 September 2026: the workshop contributor states that they created the selected Image evidence C and D assets and authorizes their inclusion and public distribution in this workshop repository. The project did not independently verify identity or third-party rights.",
+    "evidenceStatus": "Ground-truth descriptions are supplied by the user. They are not signed provenance, were not used by the detectors, and the generation or capture processes were not independently replayed.",
+    "preprocessingTool": "FFmpeg 9.0.1"
+  },
+  "cases": [
+    {
+      "id": "quiz-user-image-a-v1",
+      "mediaId": "user-image-a-v1",
+      "kind": "image",
+      "title": "Image evidence C",
+      "url": "/samples/user-cases/user-image-case-a-v1.jpg",
+      "mime": "image/jpeg",
+      "bytes": 90822,
+      "sha256": "aaa15855d3dba65a2f05b033f5b9099f9a36d7bbb912515df08ccad9701e0f24",
+      "sourceSha256": "f8281b46177f0f5e167fe2a15effc7d9f7f3d40175a9b2cc1998e554bc4370a1",
+      "sourceBytes": 1547040,
+      "truth": "manipulated",
+      "declaredProcess": "The user describes the image as an AI-generated portrait base followed by a face swap.",
+      "transform": "Converted 1024×1024 RGB PNG to 1024×1024 high-quality 4:4:4 JPEG; source metadata stripped; no crop or resize.",
+      "results": [
+        {
+          "schemaVersion": 1,
+          "model": "univfd",
+          "modelVersion": "UniversalFakeDetect 030495aea3300a8b54c0ec37ec7fe1dd7e63c619; CLIP b8cca3fd41ae0c99ba7e8951adf17d267cdb84cd88be6f7c2e0eca1737a03836",
+          "mediaSha256": "aaa15855d3dba65a2f05b033f5b9099f9a36d7bbb912515df08ccad9701e0f24",
+          "preprocessing": "ufd-original-v1: RGB, torchvision CenterCrop(224), no resize or EXIF transpose, CLIP mean/std, raw non-unit-normalized CLIP features, linear head sigmoid. Single image.",
+          "createdAt": "2026-09-28T05:44:13.682042+00:00",
+          "score": 0.21455438435077667,
+          "scoreType": "synthetic_sigmoid",
+          "note": "Uncalibrated model score. Higher leans synthetic; not a probability or proof. Actual inference on saved bytes. Actual inference on the exact metadata-stripped workshop JPEG derivative; preprocessing the source can change forensic signals."
+        },
+        {
+          "schemaVersion": 1,
+          "model": "community",
+          "modelVersion": "Community Forensics CVPR2025; OwensLab/commfor-model-384 6076002bf0d9dd37537f965ee2f06f826c333b61; sha256 b89f36275f3bf5e2b040eee36597a8f19db051bff9a473a9cf7b2466284fb387",
+          "mediaSha256": "aaa15855d3dba65a2f05b033f5b9099f9a36d7bbb912515df08ccad9701e0f24",
+          "preprocessing": "community-official-384-v1: PIL RGB, torchvision Resize(440) on the shorter side with bilinear interpolation and antialias, CenterCrop(384), ToTensor range [0,1], ImageNet mean [0.485,0.456,0.406]/std [0.229,0.224,0.225]; no EXIF transpose; float32; one central crop per image/frame.",
+          "createdAt": "2026-09-28T05:44:13.682042+00:00",
+          "score": 0.007091820240020752,
+          "scoreType": "synthetic_sigmoid",
+          "note": "Uncalibrated model score. Higher leans synthetic; not a probability or proof. Actual inference on saved bytes. Actual inference on the exact metadata-stripped workshop JPEG derivative; preprocessing the source can change forensic signals."
+        },
+        {
+          "schemaVersion": 1,
+          "model": "spai",
+          "modelVersion": "SPAI CVPR2025; source 8ff7b3b6779b4fcb43cf313471d9cb1c62d129a4; author checkpoint sha256 24159f27d7c8c2cd0cb6c4019189eb89ad0874a0d9d15f8dc9afd39ca9648a55; CPU FP32",
+          "mediaSha256": "aaa15855d3dba65a2f05b033f5b9099f9a36d7bbb912515df08ccad9701e0f24",
+          "preprocessing": "spai-official-original-resolution-v1: PIL RGB without EXIF transpose; original resolution; centre reflection padding only if an axis is shorter than 224 px; float32 pixels /255; upstream 224x224 patches with stride 224, upstream five-crop fallback if fewer than four patches; spectral masking radius 16; learned spectral context attention aggregation; sigmoid of image-level synthetic logit. Patch feature extraction in batches of eight. Incomplete edge patches are omitted by the upstream grid when the five-crop fallback does not apply.",
+          "createdAt": "2026-09-28T05:44:13.682042+00:00",
+          "score": 0.00003871563603752293,
+          "scoreType": "synthetic_sigmoid",
+          "note": "Uncalibrated synthetic-image score, not a probability or proof. Higher leans synthetic. This spectral model is a different learned signal from CLIP features; compression, resizing, camera processing and new generators can cause errors. Image-level model, not a manipulation mask or dedicated face-swap detector. Actual inference on the exact metadata-stripped workshop JPEG derivative; preprocessing the source can change forensic signals."
+        },
+        {
+          "schemaVersion": 1,
+          "model": "aide",
+          "modelVersion": "AIDE ICLR2025; GenImage checkpoint; source 6725b710d5c437ab2f59792908ce0377dfc907de; sha256 f084346dfb0cd05ab4201fe82a62d4f1b4381ee28f2c8295d6cb14d559a9ff16",
+          "mediaSha256": "aaa15855d3dba65a2f05b033f5b9099f9a36d7bbb912515df08ccad9701e0f24",
+          "preprocessing": "aide-official-genimage-v1: PIL RGB without EXIF transpose, ToTensor [0,1]; original 32x32 DCT windows at stride16, six frequency bands select two lowest and two highest frequency patches; each patch and the full image bilinearly resized to 256x256 with torchvision antialias=True and ImageNet normalization; author SRM filters, two ResNet50 noise experts and frozen CLIP ConvNeXt-XXL semantic trunk; float32 CPU; class-1 softmax over [real,fake] logits. No resize before patch selection.",
+          "createdAt": "2026-09-28T05:44:13.682042+00:00",
+          "score": 0.07710028439760208,
+          "scoreType": "synthetic_sigmoid",
+          "note": "Uncalibrated class-1 softmax (fake), equivalent to sigmoid of fake-minus-real logits. Not a probability or authenticity verdict. Actual inference on the exact metadata-stripped workshop JPEG derivative; preprocessing the source can change forensic signals."
+        },
+        {
+          "schemaVersion": 1,
+          "model": "gend",
+          "modelVersion": "GenD CLIP-L/14 WACV2026 891ce014a0308386c4d7d25b3dcf436a22db5504; MIT YuNet 47534e27c9851bb1128ccc0102f1145e27f23f98",
+          "mediaSha256": "aaa15855d3dba65a2f05b033f5b9099f9a36d7bbb912515df08ccad9701e0f24",
+          "preprocessing": "gend-yunet-v1: YuNet 2023mar, threshold 0.8, maximum image dimension 640; largest face; official GenD five-landmark alignment scale 1.3 and estimated square size; CLIP bicubic resize and centre crop 224, CLIP mean/std; L2-normalized pooled features, released linear head, softmax class 1; float32 CPU. One RGB image; no EXIF transpose.",
+          "createdAt": "2026-09-28T05:44:13.682042+00:00",
+          "score": 0.8971272110939026,
+          "scoreType": "manipulation_score",
+          "note": "Uncalibrated manipulation score, not a probability or forensic verdict. YuNet preprocessing differs from the research paper. Face-manipulation scope; no temporal or audio analysis. The largest face may switch between people; identities are not tracked. Validate with authentic controls and the workshop generators. Actual inference on the exact metadata-stripped workshop JPEG derivative; preprocessing the source can change forensic signals."
+        },
+        {
+          "schemaVersion": 1,
+          "model": "fatformer",
+          "modelVersion": "FatFormer CVPR 2024; ProGAN four-class checkpoint; source febc24c333d38b70fb8a00662ff67a38f681ad42; checkpoint sha256 3b904401ad4ce7d0bc33661e83742ec4b659850c076b73cd544e87e26d8cb3db",
+          "mediaSha256": "aaa15855d3dba65a2f05b033f5b9099f9a36d7bbb912515df08ccad9701e0f24",
+          "preprocessing": "PIL RGB; resize exactly 256x256 with PIL bilinear interpolation; center crop224; ToTensor; ImageNet mean [0.485,0.456,0.406], std [0.229,0.224,0.225]; official test dataset transform",
+          "createdAt": "2026-09-28T05:44:13.682042+00:00",
+          "score": 0.000021449079213198274,
+          "scoreType": "synthetic_softmax",
+          "note": "Uncalibrated class-1 softmax output; not posterior authenticity probability. Actual inference on the exact metadata-stripped workshop JPEG derivative; preprocessing the source can change forensic signals."
+        }
+      ],
+      "unavailableDetectors": {},
+      "prompt": "Save your first judgement at 100%, then inspect the eyes, mouth, jaw, hairline and reflective background using one zoom plus colour and edge/detail views. Reveal the six exact-file outputs last. Which results address whole-image synthesis, and which specifically address face manipulation?",
+      "explanation": "User-declared process label: AI-generated portrait base followed by a face swap. The generation log is incomplete and is not signed provenance; the workshop did not independently replay either step. The displayed file is the documented 1024×1024 metadata-stripped JPEG derivative. On these exact bytes, UniversalFakeDetect returns 0.2146, Community Forensics 0.0071, SPAI 0.000039, AIDE 0.0771, GenD 0.8971, and FatFormer 0.000021. Five broad whole-image models lean toward their non-synthetic class while the narrower face-manipulation model GenD leans strongly manipulated. This contrast is useful evidence of task scope and detector limitations, not six votes, probabilities, or proof. The creator authorized this derivative for public workshop distribution on 29 September 2026; that authorization is not signed provenance and was not independently verified."
+    },
+    {
+      "id": "quiz-user-image-b-v2",
+      "mediaId": "user-image-b-v2",
+      "kind": "image",
+      "title": "Image evidence D",
+      "url": "/samples/user-cases/user-image-case-b-v2.jpg",
+      "mime": "image/jpeg",
+      "bytes": 771048,
+      "sha256": "ab99c80e7640b70d9f6ebe0adeb61559a32c97b6b9d7c303fcc6592579f67924",
+      "sourceSha256": "24c02856fcebec4bf57dcf5089bb18f7c07d49d9133ed48e76589803b3743c62",
+      "sourceBytes": 10394864,
+      "truth": "authentic",
+      "declaredProcess": "The user describes this as a camera photograph whose heart-shaped background highlights were produced optically with a shaped aperture cut-out.",
+      "transform": "Applied EXIF orientation, resized the long edge from 6240 to 4096 pixels with Lanczos while preserving aspect ratio, encoded high-quality 4:4:4 JPEG, and stripped source metadata; no crop.",
+      "results": [
+        {
+          "schemaVersion": 1,
+          "model": "univfd",
+          "modelVersion": "UniversalFakeDetect 030495aea3300a8b54c0ec37ec7fe1dd7e63c619; CLIP b8cca3fd41ae0c99ba7e8951adf17d267cdb84cd88be6f7c2e0eca1737a03836",
+          "mediaSha256": "ab99c80e7640b70d9f6ebe0adeb61559a32c97b6b9d7c303fcc6592579f67924",
+          "preprocessing": "ufd-original-v1: RGB, torchvision CenterCrop(224), no resize or EXIF transpose, CLIP mean/std, raw non-unit-normalized CLIP features, linear head sigmoid. Single image.",
+          "createdAt": "2026-09-28T06:12:38.636474+00:00",
+          "score": 0.9546651244163513,
+          "scoreType": "synthetic_sigmoid",
+          "note": "Uncalibrated model score. Higher leans synthetic; not a probability or proof. Actual inference on saved bytes. Actual inference on the exact metadata-stripped workshop JPEG derivative; preprocessing the source can change forensic signals."
+        },
+        {
+          "schemaVersion": 1,
+          "model": "community",
+          "modelVersion": "Community Forensics CVPR2025; OwensLab/commfor-model-384 6076002bf0d9dd37537f965ee2f06f826c333b61; sha256 b89f36275f3bf5e2b040eee36597a8f19db051bff9a473a9cf7b2466284fb387",
+          "mediaSha256": "ab99c80e7640b70d9f6ebe0adeb61559a32c97b6b9d7c303fcc6592579f67924",
+          "preprocessing": "community-official-384-v1: PIL RGB, torchvision Resize(440) on the shorter side with bilinear interpolation and antialias, CenterCrop(384), ToTensor range [0,1], ImageNet mean [0.485,0.456,0.406]/std [0.229,0.224,0.225]; no EXIF transpose; float32; one central crop per image/frame.",
+          "createdAt": "2026-09-28T06:12:38.636474+00:00",
+          "score": 0.0015791435725986958,
+          "scoreType": "synthetic_sigmoid",
+          "note": "Uncalibrated model score. Higher leans synthetic; not a probability or proof. Actual inference on saved bytes. Actual inference on the exact metadata-stripped workshop JPEG derivative; preprocessing the source can change forensic signals."
+        },
+        {
+          "schemaVersion": 1,
+          "model": "spai",
+          "modelVersion": "SPAI CVPR2025; source 8ff7b3b6779b4fcb43cf313471d9cb1c62d129a4; author checkpoint sha256 24159f27d7c8c2cd0cb6c4019189eb89ad0874a0d9d15f8dc9afd39ca9648a55; CPU FP32",
+          "mediaSha256": "ab99c80e7640b70d9f6ebe0adeb61559a32c97b6b9d7c303fcc6592579f67924",
+          "preprocessing": "spai-official-original-resolution-v1: PIL RGB without EXIF transpose; original resolution; centre reflection padding only if an axis is shorter than 224 px; float32 pixels /255; upstream 224x224 patches with stride 224, upstream five-crop fallback if fewer than four patches; spectral masking radius 16; learned spectral context attention aggregation; sigmoid of image-level synthetic logit. Patch feature extraction in batches of eight. Incomplete edge patches are omitted by the upstream grid when the five-crop fallback does not apply.",
+          "createdAt": "2026-09-28T06:12:38.636474+00:00",
+          "score": 1.2845713825981875E-8,
+          "scoreType": "synthetic_sigmoid",
+          "note": "Uncalibrated synthetic-image score, not a probability or proof. Higher leans synthetic. This spectral model is a different learned signal from CLIP features; compression, resizing, camera processing and new generators can cause errors. Image-level model, not a manipulation mask or dedicated face-swap detector. Actual inference on the exact metadata-stripped workshop JPEG derivative; preprocessing the source can change forensic signals."
+        },
+        {
+          "schemaVersion": 1,
+          "model": "aide",
+          "modelVersion": "AIDE ICLR2025; GenImage checkpoint; source 6725b710d5c437ab2f59792908ce0377dfc907de; sha256 f084346dfb0cd05ab4201fe82a62d4f1b4381ee28f2c8295d6cb14d559a9ff16",
+          "mediaSha256": "ab99c80e7640b70d9f6ebe0adeb61559a32c97b6b9d7c303fcc6592579f67924",
+          "preprocessing": "aide-official-genimage-v1: PIL RGB without EXIF transpose, ToTensor [0,1]; original 32x32 DCT windows at stride16, six frequency bands select two lowest and two highest frequency patches; each patch and the full image bilinearly resized to 256x256 with torchvision antialias=True and ImageNet normalization; author SRM filters, two ResNet50 noise experts and frozen CLIP ConvNeXt-XXL semantic trunk; float32 CPU; class-1 softmax over [real,fake] logits. No resize before patch selection.",
+          "createdAt": "2026-09-28T06:12:38.636474+00:00",
+          "score": 0.05291668698191643,
+          "scoreType": "synthetic_sigmoid",
+          "note": "Uncalibrated class-1 softmax (fake), equivalent to sigmoid of fake-minus-real logits. Not a probability or authenticity verdict. Actual inference on the exact metadata-stripped workshop JPEG derivative; preprocessing the source can change forensic signals."
+        },
+        {
+          "schemaVersion": 1,
+          "model": "fatformer",
+          "modelVersion": "FatFormer CVPR 2024; ProGAN four-class checkpoint; source febc24c333d38b70fb8a00662ff67a38f681ad42; checkpoint sha256 3b904401ad4ce7d0bc33661e83742ec4b659850c076b73cd544e87e26d8cb3db",
+          "mediaSha256": "ab99c80e7640b70d9f6ebe0adeb61559a32c97b6b9d7c303fcc6592579f67924",
+          "preprocessing": "PIL RGB; resize exactly 256x256 with PIL bilinear interpolation; center crop224; ToTensor; ImageNet mean [0.485,0.456,0.406], std [0.229,0.224,0.225]; official test dataset transform",
+          "createdAt": "2026-09-28T06:12:38.636474+00:00",
+          "score": 0.00010765484330477193,
+          "scoreType": "synthetic_softmax",
+          "note": "Uncalibrated class-1 softmax output; not posterior authenticity probability. Actual inference on the exact metadata-stripped workshop JPEG derivative; preprocessing the source can change forensic signals."
+        }
+      ],
+      "unavailableDetectors": {
+        "gend": "requires-face"
+      },
+      "prompt": "Save your first judgement at 100%, then inspect the subject boundary, heart-shaped highlights, colour channels and edge/detail view using the same settings. Reveal the five exact-file classifier outputs last. Could the unusual appearance arise during capture, editing, or generation?",
+      "explanation": "User-declared process label: authentic camera photograph with heart-shaped highlights produced optically using a shaped aperture cut-out. The preserved source contains Fujifilm camera metadata, but that is not signed capture provenance and does not prove semantic truth. The displayed file is an orientation-normalized 2730×4096 metadata-stripped JPEG derivative. On these exact bytes, UniversalFakeDetect returns 0.9547, Community Forensics 0.001579, SPAI 1.285e-8, AIDE 0.0529, and FatFormer 0.000108. GenD is N/A because no face was detected; no zero was substituted. UniversalFakeDetect leans strongly synthetic while the other four whole-image scores remain low. The preserved 1920-pixel derivative scored 0.0202 with the same UniversalFakeDetect model, so this disagreement also demonstrates sensitivity to crop scale and preprocessing; neither output is a probability or proof. The creator authorized this derivative for public workshop distribution on 29 September 2026; that authorization is not signed provenance and was not independently verified."
+    }
+  ]
+}

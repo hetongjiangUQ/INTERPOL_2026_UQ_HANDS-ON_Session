@@ -1,0 +1,1 @@
+ALTER TABLE `assessments` ADD `reconsidered_response` text;

@@ -1,0 +1,106 @@
+[
+  {
+    "title": "Quiz 8 — contributor-authorised portrait video (v2)",
+    "creator": "Workshop presenter",
+    "source": null,
+    "license": "Contributor-authorised website/repository inclusion, 11 October 2026; no general reuse licence",
+    "licenseUrl": null,
+    "changes": "Own recorded video with a fictional locally generated Z-Image-Turbo face, FaceFusion 3.8.2 HyperSwap 1a, native mouth/lip exclusion and ordinary 640×602 call-quality encoding. Recorded audio retained. Six image classifiers and D3/PwTF-DVD have run on these exact bytes; the earlier Wikimedia clip's results do not apply. SHA-256 ee2aac5dfffb4a07bcc8206297325244ec85cbbcd1da05bf1a8a15b1c080e632. Private originals excluded."
+  },
+  {
+    "title": "Watermark lab — yo-yo photograph",
+    "creator": "Workshop presenter",
+    "source": null,
+    "license": "Contributor-supplied website/repository demonstration; no general reuse licence",
+    "licenseUrl": null,
+    "changes": "Unmodified supplied 502×501 PNG, used both as the authentic item comparison reference and as the watermark lab input. This is the unwatermarked source, not an embedded-watermark output. It replaces the historical Mountain input. Authenticity is presenter-declared. SHA-256 5106e8e1ebace1e6f2f117c52e62d07cf0c57095a5c9fb8d523557133ce7bb8e."
+  },
+  {
+    "title": "Authentic comparison reference — presenter portrait",
+    "creator": "Workshop presenter",
+    "source": null,
+    "license": "Contributor-supplied website/repository comparison reference; no general reuse licence",
+    "licenseUrl": null,
+    "changes": "Presenter-declared authentic portrait, used only for manual comparison, not as a scored quiz or detector input. Derived from the supplied portrait.jpg: auto-orientation, fit-inside 2048×2048 with Lanczos3 resizing and no enlargement, saved as a 2048×1535 RGB PNG without copied metadata. No crop, retouching or AI generation. Resizing changes fine detail; this is not a matched experimental control or signed capture provenance. SHA-256 224d0edb89671fde87ce7a89f5941509c29e1a0b3d6b203b3a206835ac935bd1."
+  },
+  {
+    "title": "Late Afternoon Cloudy Valley (SD3.5).webp",
+    "creator": "VulcanSphere",
+    "source": "https://commons.wikimedia.org/wiki/File:Late_Afternoon_Cloudy_Valley_(SD3.5).webp",
+    "license": "CC0-1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "changes": "Unmodified original file; renamed for the exercise."
+  },
+  {
+    "title": "Mountain (209011307).jpeg",
+    "creator": "Chaitanya Krishna",
+    "source": "https://commons.wikimedia.org/wiki/File:Mountain_(209011307).jpeg",
+    "license": "CC0-1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "changes": "Downloaded source file unchanged; renamed for Quiz 4. The source labels it a camera photograph and its metadata lists Google Pixel and Snapseed 2.0. The editing steps are unknown: unchanged download does not mean untouched camera output. The workshop answer is source-labelled authentic/camera-origin, not independent verification that no content editing occurred."
+  },
+  {
+    "title": "AIGVDBench — difficult authentic studio clip (video evidence A)",
+    "creator": "Long Ma et al. / AIGVDBench (CVPR 2026); dataset authors source the authentic class from OpenVid-HD",
+    "source": "https://huggingface.co/datasets/AIGVDBench/AIGVDBench",
+    "license": "CC BY 4.0 (dataset card declaration)",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "changes": "Unmodified archive member videos/QXqbhkHBRvA_0_70to196.mp4 from AIGVDBench/Real/Real.zip at revision bf48acaa4920990af3dd2a511ea88e63354df305; renamed only. Purpose-selected by visual inspection before the final six-detector run because its high-key studio appearance can look synthetic. Dataset label, upstream rights and capture history were not independently authenticated."
+  },
+  {
+    "title": "AIGVDBench — Sora-generated reading clip (video evidence B)",
+    "creator": "Long Ma et al. / AIGVDBench (CVPR 2026); source archive labels the generator as Sora",
+    "source": "https://huggingface.co/datasets/AIGVDBench/AIGVDBench",
+    "license": "CC BY 4.0 (dataset card declaration)",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "changes": "Unmodified archive member 0758.mp4 from AIGVDBench/ClosedSource/Sora.zip at revision bf48acaa4920990af3dd2a511ea88e63354df305; renamed only. Purpose-selected by visual inspection before the final six-detector run because the reading scene appears stable and plausible. No prompt, matched authentic source or signed generation provenance is claimed; dataset label and upstream rights were not independently authenticated."
+  },
+  {
+    "title": "Face Research Lab London Set — portrait stress case D",
+    "creator": "Lisa DeBruine and Benedict Jones, Face Research Lab London Set, version 5 (2017)",
+    "source": "https://figshare.com/articles/dataset/Face_Research_Lab_London_Set/5047666",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "changes": "Unmodified source JPEG 025_03.jpg. The authors report signed adult consent for research and presentations; the signed form was not obtained for this workshop. This case was purpose-selected after detector-output inspection and is not a random sample or accuracy estimate."
+  },
+  {
+    "title": "SFHQ-T2I — portrait stress case E",
+    "creator": "David Beniaguev, SFHQ-T2I (2024), existing FLUX1.dev sample 0000336",
+    "source": "https://www.kaggle.com/datasets/selfishgene/sfhq-t2i-synthetic-faces-from-text-2-image-models/versions/1",
+    "license": "MIT (publisher-declared)",
+    "licenseUrl": "https://raw.githubusercontent.com/SelfishGene/SFHQ-T2I-dataset/main/LICENSE.txt",
+    "changes": "Unmodified source JPEG FLUX1_dev_image_0000336.jpg. Publisher-documented fully synthetic adult portrait; no image generation was performed for this workshop. This case was purpose-selected after detector-output inspection and is not a random sample or accuracy estimate."
+  },
+  {
+    "title": "Identity evidence A — controlled still-photo face swap",
+    "creator": "FaceSwapAI Editorial / DeepSwap LLC, Controlled Photo Face-Swap Pose Study v1.0.0",
+    "source": "https://faceswapai.com/resources/photo-face-swap-pose-study",
+    "license": "CC BY 4.0 (publisher declaration)",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "changes": "Unmodified 1280×720 neutral PNG from the publisher's versioned study record. The publisher states that both inputs are purpose-built synthetic adult identities. This vendor-published record is not peer reviewed or signed provenance; the upstream provider/model and provider-specific rights are not identified, identity provenance was not independently verified, and the generation was not replayed."
+  },
+  {
+    "title": "Identity evidence B — Wikimedia face-swap video",
+    "creator": "Msahique / Wikimedia Commons (2024)",
+    "source": "https://commons.wikimedia.org/wiki/File:Face_Swap.webm",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "changes": "Unchanged 53.112-second, 848 × 480 WebM original. Wikimedia records the date as 21 October 2024, the source as own work, the author as Msahique, and the description as a face-swapped video. The uploader-supplied label is source metadata, not signed provenance or an independently reproduced generation record. The file page does not document depicted-subject consent, source/target identities, or the generation tool. CC0 permits copyright reuse but does not resolve publicity or privacy rights. Included at the instructor's direction with those limitations accepted."
+  },
+  {
+    "title": "Image evidence C — user-supplied manipulated portrait",
+    "creator": "Workshop contributor",
+    "source": null,
+    "license": "Creator-authorised repository/workshop distribution (confirmed 29 September 2026); no general reuse licence",
+    "licenseUrl": null,
+    "changes": "Contributor-declared AI-generated portrait base followed by a face swap. The contributor stated that they created the case and expressly authorised this 1024 × 1024 participant JPEG for this repository. The private original PNG is not bundled; the derivative is a high-quality 4:4:4 JPEG with metadata stripped and no resize or crop. The process record is not signed provenance and was not independently replayed."
+  },
+  {
+    "title": "Image evidence D — user-supplied camera photograph",
+    "creator": "Workshop contributor",
+    "source": null,
+    "license": "Creator-authorised repository/workshop distribution (confirmed 29 September 2026); no general reuse licence",
+    "licenseUrl": null,
+    "changes": "Contributor-declared authentic camera photograph with heart-shaped highlights produced optically using a shaped aperture cut-out. The contributor stated that they created the photograph and expressly authorised the selected v2 derivative for this repository. The private Fujifilm original is not bundled; v2 applies the source orientation, resizes without cropping to 2730 × 4096, uses high-quality 4:4:4 JPEG, and strips metadata. Camera metadata and the contributor label are not signed capture provenance."
+  }
+]

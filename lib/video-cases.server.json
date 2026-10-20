@@ -1,0 +1,609 @@
+[
+  {
+    "id": "quiz-video-authentic-hard",
+    "mediaId": "aigvd-hard-authentic-media",
+    "title": "Video evidence A",
+    "prompt": "Watch the complete clip and record your assessment before revealing six saved classifier outputs. Compare their frame-by-frame behaviour, then decide what the results can and cannot establish.",
+    "url": "/samples/video/quiz-video-authentic-hard.mp4",
+    "mime": "video/mp4",
+    "bytes": 998553,
+    "sha256": "7d4cc1bf7325dfd2222fd5194c05cc07ca194436489c2de53a75c0961429c036",
+    "durationSeconds": 4.379379,
+    "truth": "authentic",
+    "explanation": "Dataset-labelled authentic video from AIGVDBench (CVPR 2026), sourced by its authors from OpenVid-HD; exact archive member videos/QXqbhkHBRvA_0_70to196.mp4. Downloaded at pinned dataset revision bf48acaa4920990af3dd2a511ea88e63354df305; no trimming, transcoding, watermark removal or other media edit. Selected by visual inspection before running the final six-detector comparison because its high-key studio presentation can look synthetic. This is a purpose-selected teaching case, not a random sample. The two clips were independently selected and are not claimed to share a prompt or identity. The public release does not expose a verified mapping from the numeric closed-source filename to the real-video IDs. The source label is publisher documentation, not signed provenance or independent authentication. UniversalFakeDetect, Community Forensics, SPAI, AIDE and FatFormer were run as image classifiers on the same eight evenly spaced frames; GenD analysed face crops from those frames and addresses the narrower face-manipulation task. Five outputs are very low and AIDE is higher but still uncalibrated; that pattern does not authenticate the clip. None of the six analyses motion, temporal consistency, lip-sync or audio. Their outputs are uncalibrated and must not be averaged into a truth score. This deliberately difficult two-clip case study is not an accuracy benchmark. Dataset card licence declaration: CC BY 4.0; upstream rights were not independently audited.",
+    "results": [
+      {
+        "schemaVersion": 1,
+        "model": "univfd",
+        "modelVersion": "UniversalFakeDetect 030495aea3300a8b54c0ec37ec7fe1dd7e63c619; CLIP b8cca3fd41ae0c99ba7e8951adf17d267cdb84cd88be6f7c2e0eca1737a03836",
+        "mediaSha256": "7d4cc1bf7325dfd2222fd5194c05cc07ca194436489c2de53a75c0961429c036",
+        "preprocessing": "ufd-original-v1: RGB, torchvision CenterCrop(224), no resize or EXIF transpose, CLIP mean/std, raw non-unit-normalized CLIP features, linear head sigmoid. Single image. Video wrapper: 8 uniformly spaced frames decoded once with OpenCV; arithmetic mean over 8 scored frames; timestamp estimates use the container frame rate.",
+        "createdAt": "2026-09-20T12:57:30.352886+00:00",
+        "score": 0.005647415324347094,
+        "scoreType": "synthetic_sigmoid",
+        "samples": [
+          {
+            "timeSeconds": 0,
+            "score": 0.008497239090502262
+          },
+          {
+            "timeSeconds": 0.5839,
+            "score": 0.007789943367242813
+          },
+          {
+            "timeSeconds": 1.2095,
+            "score": 0.013672941364347935
+          },
+          {
+            "timeSeconds": 1.8352,
+            "score": 0.00525967963039875
+          },
+          {
+            "timeSeconds": 2.4608,
+            "score": 0.0037712727207690477
+          },
+          {
+            "timeSeconds": 3.0864,
+            "score": 0.0014533118810504675
+          },
+          {
+            "timeSeconds": 3.712,
+            "score": 0.002375677926465869
+          },
+          {
+            "timeSeconds": 4.3377,
+            "score": 0.002359256613999605
+          }
+        ],
+        "note": "Uncalibrated model score. Higher leans synthetic; not a probability or proof. Actual inference on saved bytes. Sampled image frames only; no motion, temporal-consistency, lip-sync or audio analysis."
+      },
+      {
+        "schemaVersion": 1,
+        "model": "community",
+        "modelVersion": "Community Forensics CVPR2025; OwensLab/commfor-model-384 6076002bf0d9dd37537f965ee2f06f826c333b61; sha256 b89f36275f3bf5e2b040eee36597a8f19db051bff9a473a9cf7b2466284fb387",
+        "mediaSha256": "7d4cc1bf7325dfd2222fd5194c05cc07ca194436489c2de53a75c0961429c036",
+        "preprocessing": "community-official-384-v1: PIL RGB, torchvision Resize(440) on the shorter side with bilinear interpolation and antialias, CenterCrop(384), ToTensor range [0,1], ImageNet mean [0.485,0.456,0.406]/std [0.229,0.224,0.225]; no EXIF transpose; float32; one central crop per image/frame. Video wrapper: 8 uniformly spaced frames decoded once with OpenCV; arithmetic mean over 8 scored frames; timestamp estimates use the container frame rate.",
+        "createdAt": "2026-09-20T12:57:30.352886+00:00",
+        "score": 0.0032073512684291927,
+        "scoreType": "synthetic_sigmoid",
+        "samples": [
+          {
+            "timeSeconds": 0,
+            "score": 0.00011405395343899727
+          },
+          {
+            "timeSeconds": 0.5839,
+            "score": 0.0005879278178326786
+          },
+          {
+            "timeSeconds": 1.2095,
+            "score": 0.00007724350143689662
+          },
+          {
+            "timeSeconds": 1.8352,
+            "score": 0.00025171422748826444
+          },
+          {
+            "timeSeconds": 2.4608,
+            "score": 0.004733324516564608
+          },
+          {
+            "timeSeconds": 3.0864,
+            "score": 0.01551402173936367
+          },
+          {
+            "timeSeconds": 3.712,
+            "score": 0.003732225624844432
+          },
+          {
+            "timeSeconds": 4.3377,
+            "score": 0.000648298766463995
+          }
+        ],
+        "note": "Uncalibrated model score. Higher leans synthetic; not a probability or proof. Actual inference on saved bytes. Sampled image frames only; no motion, temporal-consistency, lip-sync or audio analysis."
+      },
+      {
+        "schemaVersion": 1,
+        "model": "spai",
+        "modelVersion": "SPAI CVPR2025; source 8ff7b3b6779b4fcb43cf313471d9cb1c62d129a4; author checkpoint sha256 24159f27d7c8c2cd0cb6c4019189eb89ad0874a0d9d15f8dc9afd39ca9648a55; CPU FP32",
+        "mediaSha256": "7d4cc1bf7325dfd2222fd5194c05cc07ca194436489c2de53a75c0961429c036",
+        "preprocessing": "spai-official-original-resolution-v1: PIL RGB without EXIF transpose; original resolution; centre reflection padding only if an axis is shorter than 224 px; float32 pixels /255; upstream 224x224 patches with stride 224, upstream five-crop fallback if fewer than four patches; spectral masking radius 16; learned spectral context attention aggregation; sigmoid of image-level synthetic logit. Patch feature extraction in batches of eight. Incomplete edge patches are omitted by the upstream grid when the five-crop fallback does not apply. Video wrapper: 8 uniformly spaced frames decoded once with OpenCV; arithmetic mean over 8 scored frames; timestamp estimates use the container frame rate.",
+        "createdAt": "2026-09-20T12:57:30.352886+00:00",
+        "score": 0.00030965490201160747,
+        "scoreType": "synthetic_sigmoid",
+        "samples": [
+          {
+            "timeSeconds": 0,
+            "score": 0.0024767559953033924
+          },
+          {
+            "timeSeconds": 0.5839,
+            "score": 4.4842743407436103e-10
+          },
+          {
+            "timeSeconds": 1.2095,
+            "score": 4.827722932532197e-7
+          },
+          {
+            "timeSeconds": 1.8352,
+            "score": 4.2627514681940866e-19
+          },
+          {
+            "timeSeconds": 2.4608,
+            "score": 5.742041092821407e-14
+          },
+          {
+            "timeSeconds": 3.0864,
+            "score": 4.859504251363174e-15
+          },
+          {
+            "timeSeconds": 3.712,
+            "score": 1.6904734160210584e-16
+          },
+          {
+            "timeSeconds": 4.3377,
+            "score": 6.3305222304207206e-15
+          }
+        ],
+        "note": "Uncalibrated synthetic-image score, not a probability or proof. Higher leans synthetic. This spectral model is a different learned signal from CLIP features; compression, resizing, camera processing and new generators can cause errors. Image-level model, not a manipulation mask or dedicated face-swap detector. Sampled image frames only; no motion, temporal-consistency, lip-sync or audio analysis."
+      },
+      {
+        "schemaVersion": 1,
+        "model": "aide",
+        "modelVersion": "AIDE ICLR2025; GenImage checkpoint; source 6725b710d5c437ab2f59792908ce0377dfc907de; sha256 f084346dfb0cd05ab4201fe82a62d4f1b4381ee28f2c8295d6cb14d559a9ff16",
+        "mediaSha256": "7d4cc1bf7325dfd2222fd5194c05cc07ca194436489c2de53a75c0961429c036",
+        "preprocessing": "aide-official-genimage-v1: PIL RGB without EXIF transpose, ToTensor [0,1]; original 32x32 DCT windows at stride16, six frequency bands select two lowest and two highest frequency patches; each patch and the full image bilinearly resized to 256x256 with torchvision antialias=True and ImageNet normalization; author SRM filters, two ResNet50 noise experts and frozen CLIP ConvNeXt-XXL semantic trunk; float32 CPU; class-1 softmax over [real,fake] logits. No resize before patch selection. Video wrapper: 8 uniformly spaced frames decoded once with OpenCV; arithmetic mean over 8 scored frames; timestamp estimates use the container frame rate.",
+        "createdAt": "2026-09-20T12:57:30.352886+00:00",
+        "score": 0.3201975170522928,
+        "scoreType": "synthetic_sigmoid",
+        "samples": [
+          {
+            "timeSeconds": 0,
+            "score": 0.1997024267911911
+          },
+          {
+            "timeSeconds": 0.5839,
+            "score": 0.1365998089313507
+          },
+          {
+            "timeSeconds": 1.2095,
+            "score": 0.4580311179161072
+          },
+          {
+            "timeSeconds": 1.8352,
+            "score": 0.316474050283432
+          },
+          {
+            "timeSeconds": 2.4608,
+            "score": 0.4607454240322113
+          },
+          {
+            "timeSeconds": 3.0864,
+            "score": 0.3930216133594513
+          },
+          {
+            "timeSeconds": 3.712,
+            "score": 0.3221062421798706
+          },
+          {
+            "timeSeconds": 4.3377,
+            "score": 0.2748994529247284
+          }
+        ],
+        "note": "Uncalibrated class-1 softmax (fake), equivalent to sigmoid of fake-minus-real logits. Not a probability or authenticity verdict. Sampled image frames only; no motion, temporal-consistency, lip-sync or audio analysis."
+      },
+      {
+        "schemaVersion": 1,
+        "model": "gend",
+        "modelVersion": "GenD CLIP-L/14 WACV2026 891ce014a0308386c4d7d25b3dcf436a22db5504; MIT YuNet 47534e27c9851bb1128ccc0102f1145e27f23f98",
+        "mediaSha256": "7d4cc1bf7325dfd2222fd5194c05cc07ca194436489c2de53a75c0961429c036",
+        "preprocessing": "gend-yunet-v1: YuNet 2023mar, threshold 0.8, maximum image dimension 640; largest face; official GenD five-landmark alignment scale 1.3 and estimated square size; CLIP bicubic resize and centre crop 224, CLIP mean/std; L2-normalized pooled features, released linear head, softmax class 1; float32 CPU. One RGB image; no EXIF transpose. Video wrapper: 8 uniformly spaced frames decoded once with OpenCV; arithmetic mean over 8 scored frames; timestamp estimates use the container frame rate.",
+        "createdAt": "2026-09-20T12:57:30.352886+00:00",
+        "score": 0.08819201122969389,
+        "scoreType": "manipulation_score",
+        "samples": [
+          {
+            "timeSeconds": 0,
+            "score": 0.07706888020038605
+          },
+          {
+            "timeSeconds": 0.5839,
+            "score": 0.0863245502114296
+          },
+          {
+            "timeSeconds": 1.2095,
+            "score": 0.0457095205783844
+          },
+          {
+            "timeSeconds": 1.8352,
+            "score": 0.0887475535273552
+          },
+          {
+            "timeSeconds": 2.4608,
+            "score": 0.1278783529996872
+          },
+          {
+            "timeSeconds": 3.0864,
+            "score": 0.183109849691391
+          },
+          {
+            "timeSeconds": 3.712,
+            "score": 0.04043852537870407
+          },
+          {
+            "timeSeconds": 4.3377,
+            "score": 0.05625885725021362
+          }
+        ],
+        "note": "Uncalibrated manipulation score, not a probability or forensic verdict. YuNet preprocessing differs from the research paper. Face-manipulation scope; no temporal or audio analysis. The largest face may switch between people; identities are not tracked. Validate with authentic controls and the workshop generators. Sampled image frames only; no motion, temporal-consistency, lip-sync or audio analysis. 0 of 8 sampled frames had no usable face result and were excluded rather than scored as zero."
+      },
+      {
+        "schemaVersion": 1,
+        "model": "fatformer",
+        "modelVersion": "FatFormer CVPR 2024; ProGAN four-class checkpoint; CLIP ViT-L/14; source febc24c333d38b70fb8a00662ff67a38f681ad42; checkpoint sha256 3b904401ad4ce7d0bc33661e83742ec4b659850c076b73cd544e87e26d8cb3db",
+        "mediaSha256": "7d4cc1bf7325dfd2222fd5194c05cc07ca194436489c2de53a75c0961429c036",
+        "preprocessing": "PIL RGB; resize exactly 256x256 with PIL bilinear interpolation; center crop224; ToTensor; ImageNet mean [0.485,0.456,0.406], std [0.229,0.224,0.225]; official test dataset transform Video wrapper: 8 uniformly spaced frames decoded once with OpenCV; arithmetic mean of frame scores; timestamp estimates use the container frame rate.",
+        "createdAt": "2026-09-20T12:57:30.352886+00:00",
+        "score": 0.00009285586929763667,
+        "scoreType": "synthetic_softmax",
+        "samples": [
+          {
+            "timeSeconds": 0,
+            "score": 0.000002915283403126523
+          },
+          {
+            "timeSeconds": 0.5839,
+            "score": 0.00004926017209072597
+          },
+          {
+            "timeSeconds": 1.2095,
+            "score": 0.000016380532542825677
+          },
+          {
+            "timeSeconds": 1.8352,
+            "score": 0.0000897756835911423
+          },
+          {
+            "timeSeconds": 2.4608,
+            "score": 0.00004060913488501683
+          },
+          {
+            "timeSeconds": 3.0864,
+            "score": 0.0003388896002434194
+          },
+          {
+            "timeSeconds": 3.712,
+            "score": 0.00017599308921489865
+          },
+          {
+            "timeSeconds": 4.3377,
+            "score": 0.00002902345840993803
+          }
+        ],
+        "note": "Uncalibrated class-1 softmax output from the released ProGAN four-class checkpoint; not a probability of authenticity. Sampled image frames only; no motion, temporal-consistency, lip-sync or audio analysis."
+      }
+    ],
+    "source": {
+      "id": "hard-authentic",
+      "archive": "AIGVDBench/Real/Real.zip",
+      "member": "videos/QXqbhkHBRvA_0_70to196.mp4",
+      "file": "video-hard-authentic.mp4",
+      "groundTruth": "authentic",
+      "label": "Authentic / OpenVid-HD source",
+      "bytes": 998553,
+      "sha256": "7d4cc1bf7325dfd2222fd5194c05cc07ca194436489c2de53a75c0961429c036",
+      "crc32": "eb0a1df9",
+      "datasetRevision": "bf48acaa4920990af3dd2a511ea88e63354df305",
+      "retrievedAt": "2026-09-20T13:16:53Z",
+      "source": "https://huggingface.co/datasets/AIGVDBench/AIGVDBench",
+      "license": "CC BY 4.0 (dataset card declaration)",
+      "transformation": "None; exact decompressed archive member",
+      "selectionDisclosure": "Selected by visual inspection before running the final six-detector comparison because its high-key studio presentation can look synthetic. This is a purpose-selected teaching case, not a random sample.",
+      "pairingCaveat": "Independently selected samples; no prompt or identity pairing is claimed."
+    }
+  },
+  {
+    "id": "quiz-video-synthetic-hard",
+    "mediaId": "aigvd-hard-synthetic-media",
+    "title": "Video evidence B",
+    "prompt": "Watch the complete clip and record your assessment before revealing six saved classifier outputs. Compare their frame-by-frame behaviour and the narrower scope of the face-manipulation model.",
+    "url": "/samples/video/quiz-video-synthetic-hard.mp4",
+    "mime": "video/mp4",
+    "bytes": 3079555,
+    "sha256": "d557d12335e607e4fe9f05655ac6865762ac9a97596eb9f06aaec8685ba13df5",
+    "durationSeconds": 5,
+    "truth": "manipulated",
+    "explanation": "Dataset-labelled AI-generated video from the AIGVDBench Sora archive; exact archive member 0758.mp4. Downloaded at pinned dataset revision bf48acaa4920990af3dd2a511ea88e63354df305; no trimming, transcoding, watermark removal or other media edit. Selected by visual inspection before running the final six-detector comparison because the human-facing reading scene remains visually stable and plausible. This is a purpose-selected teaching case, not a random sample. The two clips were independently selected and are not claimed to share a prompt or identity. The public release does not expose a verified mapping from the numeric closed-source filename to the real-video IDs. The source label is publisher documentation, not signed provenance or independent authentication. UniversalFakeDetect, Community Forensics, SPAI, AIDE and FatFormer were run as image classifiers on the same eight evenly spaced frames; GenD analysed face crops from those frames and addresses the narrower face-manipulation task. SPAI leans synthetic on this file while the other five outputs remain low to modest; their disagreement illustrates a miss, not a benchmark-wide accuracy estimate. None of the six analyses motion, temporal consistency, lip-sync or audio. Their outputs are uncalibrated and must not be averaged into a truth score. This deliberately difficult two-clip case study is not an accuracy benchmark. Dataset card licence declaration: CC BY 4.0; upstream rights were not independently audited.",
+    "results": [
+      {
+        "schemaVersion": 1,
+        "model": "univfd",
+        "modelVersion": "UniversalFakeDetect 030495aea3300a8b54c0ec37ec7fe1dd7e63c619; CLIP b8cca3fd41ae0c99ba7e8951adf17d267cdb84cd88be6f7c2e0eca1737a03836",
+        "mediaSha256": "d557d12335e607e4fe9f05655ac6865762ac9a97596eb9f06aaec8685ba13df5",
+        "preprocessing": "ufd-original-v1: RGB, torchvision CenterCrop(224), no resize or EXIF transpose, CLIP mean/std, raw non-unit-normalized CLIP features, linear head sigmoid. Single image. Video wrapper: 8 uniformly spaced frames decoded once with OpenCV; arithmetic mean over 8 scored frames; timestamp estimates use the container frame rate.",
+        "createdAt": "2026-09-20T12:57:30.352886+00:00",
+        "score": 0.00012141607703597401,
+        "scoreType": "synthetic_sigmoid",
+        "samples": [
+          {
+            "timeSeconds": 0,
+            "score": 0.0006576765445061028
+          },
+          {
+            "timeSeconds": 0.7,
+            "score": 0.00021774570632260293
+          },
+          {
+            "timeSeconds": 1.4,
+            "score": 0.000038638583646388724
+          },
+          {
+            "timeSeconds": 2.1,
+            "score": 0.00003056352215935476
+          },
+          {
+            "timeSeconds": 2.8333,
+            "score": 0.000005182086169952527
+          },
+          {
+            "timeSeconds": 3.5333,
+            "score": 0.000011156994332850445
+          },
+          {
+            "timeSeconds": 4.2333,
+            "score": 0.000004302631623431807
+          },
+          {
+            "timeSeconds": 4.9667,
+            "score": 0.000006062547527108109
+          }
+        ],
+        "note": "Uncalibrated model score. Higher leans synthetic; not a probability or proof. Actual inference on saved bytes. Sampled image frames only; no motion, temporal-consistency, lip-sync or audio analysis."
+      },
+      {
+        "schemaVersion": 1,
+        "model": "community",
+        "modelVersion": "Community Forensics CVPR2025; OwensLab/commfor-model-384 6076002bf0d9dd37537f965ee2f06f826c333b61; sha256 b89f36275f3bf5e2b040eee36597a8f19db051bff9a473a9cf7b2466284fb387",
+        "mediaSha256": "d557d12335e607e4fe9f05655ac6865762ac9a97596eb9f06aaec8685ba13df5",
+        "preprocessing": "community-official-384-v1: PIL RGB, torchvision Resize(440) on the shorter side with bilinear interpolation and antialias, CenterCrop(384), ToTensor range [0,1], ImageNet mean [0.485,0.456,0.406]/std [0.229,0.224,0.225]; no EXIF transpose; float32; one central crop per image/frame. Video wrapper: 8 uniformly spaced frames decoded once with OpenCV; arithmetic mean over 8 scored frames; timestamp estimates use the container frame rate.",
+        "createdAt": "2026-09-20T12:57:30.352886+00:00",
+        "score": 0.019793755215232522,
+        "scoreType": "synthetic_sigmoid",
+        "samples": [
+          {
+            "timeSeconds": 0,
+            "score": 0.0933464914560318
+          },
+          {
+            "timeSeconds": 0.7,
+            "score": 0.02185801975429058
+          },
+          {
+            "timeSeconds": 1.4,
+            "score": 0.031147504225373268
+          },
+          {
+            "timeSeconds": 2.1,
+            "score": 0.006157329771667719
+          },
+          {
+            "timeSeconds": 2.8333,
+            "score": 0.000042900614062091336
+          },
+          {
+            "timeSeconds": 3.5333,
+            "score": 0.00007132645259844139
+          },
+          {
+            "timeSeconds": 4.2333,
+            "score": 0.0010970283765345812
+          },
+          {
+            "timeSeconds": 4.9667,
+            "score": 0.004629441071301699
+          }
+        ],
+        "note": "Uncalibrated model score. Higher leans synthetic; not a probability or proof. Actual inference on saved bytes. Sampled image frames only; no motion, temporal-consistency, lip-sync or audio analysis."
+      },
+      {
+        "schemaVersion": 1,
+        "model": "spai",
+        "modelVersion": "SPAI CVPR2025; source 8ff7b3b6779b4fcb43cf313471d9cb1c62d129a4; author checkpoint sha256 24159f27d7c8c2cd0cb6c4019189eb89ad0874a0d9d15f8dc9afd39ca9648a55; CPU FP32",
+        "mediaSha256": "d557d12335e607e4fe9f05655ac6865762ac9a97596eb9f06aaec8685ba13df5",
+        "preprocessing": "spai-official-original-resolution-v1: PIL RGB without EXIF transpose; original resolution; centre reflection padding only if an axis is shorter than 224 px; float32 pixels /255; upstream 224x224 patches with stride 224, upstream five-crop fallback if fewer than four patches; spectral masking radius 16; learned spectral context attention aggregation; sigmoid of image-level synthetic logit. Patch feature extraction in batches of eight. Incomplete edge patches are omitted by the upstream grid when the five-crop fallback does not apply. Video wrapper: 8 uniformly spaced frames decoded once with OpenCV; arithmetic mean over 8 scored frames; timestamp estimates use the container frame rate.",
+        "createdAt": "2026-09-20T12:57:30.352886+00:00",
+        "score": 0.7307629075880868,
+        "scoreType": "synthetic_sigmoid",
+        "samples": [
+          {
+            "timeSeconds": 0,
+            "score": 0.00003738183659152128
+          },
+          {
+            "timeSeconds": 0.7,
+            "score": 0.37660932540893555
+          },
+          {
+            "timeSeconds": 1.4,
+            "score": 0.9439030289649963
+          },
+          {
+            "timeSeconds": 2.1,
+            "score": 0.6193667650222778
+          },
+          {
+            "timeSeconds": 2.8333,
+            "score": 0.9985960125923157
+          },
+          {
+            "timeSeconds": 3.5333,
+            "score": 0.924292802810669
+          },
+          {
+            "timeSeconds": 4.2333,
+            "score": 0.9843206405639648
+          },
+          {
+            "timeSeconds": 4.9667,
+            "score": 0.9989773035049438
+          }
+        ],
+        "note": "Uncalibrated synthetic-image score, not a probability or proof. Higher leans synthetic. This spectral model is a different learned signal from CLIP features; compression, resizing, camera processing and new generators can cause errors. Image-level model, not a manipulation mask or dedicated face-swap detector. Sampled image frames only; no motion, temporal-consistency, lip-sync or audio analysis."
+      },
+      {
+        "schemaVersion": 1,
+        "model": "aide",
+        "modelVersion": "AIDE ICLR2025; GenImage checkpoint; source 6725b710d5c437ab2f59792908ce0377dfc907de; sha256 f084346dfb0cd05ab4201fe82a62d4f1b4381ee28f2c8295d6cb14d559a9ff16",
+        "mediaSha256": "d557d12335e607e4fe9f05655ac6865762ac9a97596eb9f06aaec8685ba13df5",
+        "preprocessing": "aide-official-genimage-v1: PIL RGB without EXIF transpose, ToTensor [0,1]; original 32x32 DCT windows at stride16, six frequency bands select two lowest and two highest frequency patches; each patch and the full image bilinearly resized to 256x256 with torchvision antialias=True and ImageNet normalization; author SRM filters, two ResNet50 noise experts and frozen CLIP ConvNeXt-XXL semantic trunk; float32 CPU; class-1 softmax over [real,fake] logits. No resize before patch selection. Video wrapper: 8 uniformly spaced frames decoded once with OpenCV; arithmetic mean over 8 scored frames; timestamp estimates use the container frame rate.",
+        "createdAt": "2026-09-20T12:57:30.352886+00:00",
+        "score": 0.05244929390028119,
+        "scoreType": "synthetic_sigmoid",
+        "samples": [
+          {
+            "timeSeconds": 0,
+            "score": 0.05754943937063217
+          },
+          {
+            "timeSeconds": 0.7,
+            "score": 0.05067923665046692
+          },
+          {
+            "timeSeconds": 1.4,
+            "score": 0.04950592294335365
+          },
+          {
+            "timeSeconds": 2.1,
+            "score": 0.05437300726771355
+          },
+          {
+            "timeSeconds": 2.8333,
+            "score": 0.05229027941823006
+          },
+          {
+            "timeSeconds": 3.5333,
+            "score": 0.05045261234045029
+          },
+          {
+            "timeSeconds": 4.2333,
+            "score": 0.053592048585414886
+          },
+          {
+            "timeSeconds": 4.9667,
+            "score": 0.05115180462598801
+          }
+        ],
+        "note": "Uncalibrated class-1 softmax (fake), equivalent to sigmoid of fake-minus-real logits. Not a probability or authenticity verdict. Sampled image frames only; no motion, temporal-consistency, lip-sync or audio analysis."
+      },
+      {
+        "schemaVersion": 1,
+        "model": "gend",
+        "modelVersion": "GenD CLIP-L/14 WACV2026 891ce014a0308386c4d7d25b3dcf436a22db5504; MIT YuNet 47534e27c9851bb1128ccc0102f1145e27f23f98",
+        "mediaSha256": "d557d12335e607e4fe9f05655ac6865762ac9a97596eb9f06aaec8685ba13df5",
+        "preprocessing": "gend-yunet-v1: YuNet 2023mar, threshold 0.8, maximum image dimension 640; largest face; official GenD five-landmark alignment scale 1.3 and estimated square size; CLIP bicubic resize and centre crop 224, CLIP mean/std; L2-normalized pooled features, released linear head, softmax class 1; float32 CPU. One RGB image; no EXIF transpose. Video wrapper: 8 uniformly spaced frames decoded once with OpenCV; arithmetic mean over 8 scored frames; timestamp estimates use the container frame rate.",
+        "createdAt": "2026-09-20T12:57:30.352886+00:00",
+        "score": 0.28594525065273046,
+        "scoreType": "manipulation_score",
+        "samples": [
+          {
+            "timeSeconds": 0,
+            "score": 0.2991017997264862
+          },
+          {
+            "timeSeconds": 0.7,
+            "score": 0.27818846702575684
+          },
+          {
+            "timeSeconds": 1.4,
+            "score": 0.48660823702812195
+          },
+          {
+            "timeSeconds": 2.1,
+            "score": 0.10295484960079193
+          },
+          {
+            "timeSeconds": 2.8333,
+            "score": 0.47725650668144226
+          },
+          {
+            "timeSeconds": 3.5333,
+            "score": 0.40369823575019836
+          },
+          {
+            "timeSeconds": 4.2333,
+            "score": 0.14379268884658813
+          },
+          {
+            "timeSeconds": 4.9667,
+            "score": 0.09596122056245804
+          }
+        ],
+        "note": "Uncalibrated manipulation score, not a probability or forensic verdict. YuNet preprocessing differs from the research paper. Face-manipulation scope; no temporal or audio analysis. The largest face may switch between people; identities are not tracked. Validate with authentic controls and the workshop generators. Sampled image frames only; no motion, temporal-consistency, lip-sync or audio analysis. 0 of 8 sampled frames had no usable face result and were excluded rather than scored as zero."
+      },
+      {
+        "schemaVersion": 1,
+        "model": "fatformer",
+        "modelVersion": "FatFormer CVPR 2024; ProGAN four-class checkpoint; CLIP ViT-L/14; source febc24c333d38b70fb8a00662ff67a38f681ad42; checkpoint sha256 3b904401ad4ce7d0bc33661e83742ec4b659850c076b73cd544e87e26d8cb3db",
+        "mediaSha256": "d557d12335e607e4fe9f05655ac6865762ac9a97596eb9f06aaec8685ba13df5",
+        "preprocessing": "PIL RGB; resize exactly 256x256 with PIL bilinear interpolation; center crop224; ToTensor; ImageNet mean [0.485,0.456,0.406], std [0.229,0.224,0.225]; official test dataset transform Video wrapper: 8 uniformly spaced frames decoded once with OpenCV; arithmetic mean of frame scores; timestamp estimates use the container frame rate.",
+        "createdAt": "2026-09-20T12:57:30.352886+00:00",
+        "score": 5.378423644231134e-7,
+        "scoreType": "synthetic_softmax",
+        "samples": [
+          {
+            "timeSeconds": 0,
+            "score": 5.313200972523191e-7
+          },
+          {
+            "timeSeconds": 0.7,
+            "score": 3.2852460662979865e-7
+          },
+          {
+            "timeSeconds": 1.4,
+            "score": 5.985150437481934e-7
+          },
+          {
+            "timeSeconds": 2.1,
+            "score": 3.869467377626279e-7
+          },
+          {
+            "timeSeconds": 2.8333,
+            "score": 3.796949101797509e-7
+          },
+          {
+            "timeSeconds": 3.5333,
+            "score": 8.518383083355729e-7
+          },
+          {
+            "timeSeconds": 4.2333,
+            "score": 7.000786581556895e-7
+          },
+          {
+            "timeSeconds": 4.9667,
+            "score": 5.258205533209548e-7
+          }
+        ],
+        "note": "Uncalibrated class-1 softmax output from the released ProGAN four-class checkpoint; not a probability of authenticity. Sampled image frames only; no motion, temporal-consistency, lip-sync or audio analysis."
+      }
+    ],
+    "source": {
+      "id": "hard-synthetic",
+      "archive": "AIGVDBench/ClosedSource/Sora.zip",
+      "member": "0758.mp4",
+      "file": "video-hard-sora.mp4",
+      "groundTruth": "AI-generated",
+      "generator": "Sora",
+      "label": "AI-generated / Sora",
+      "bytes": 3079555,
+      "sha256": "d557d12335e607e4fe9f05655ac6865762ac9a97596eb9f06aaec8685ba13df5",
+      "crc32": "3b876e36",
+      "datasetRevision": "bf48acaa4920990af3dd2a511ea88e63354df305",
+      "retrievedAt": "2026-09-20T13:16:53Z",
+      "source": "https://huggingface.co/datasets/AIGVDBench/AIGVDBench",
+      "license": "CC BY 4.0 (dataset card declaration)",
+      "transformation": "None; exact decompressed archive member",
+      "selectionDisclosure": "Selected by visual inspection before running the final six-detector comparison because the human-facing reading scene remains visually stable and plausible. This is a purpose-selected teaching case, not a random sample.",
+      "pairingCaveat": "Independently selected samples; no prompt or identity pairing is claimed."
+    }
+  }
+]

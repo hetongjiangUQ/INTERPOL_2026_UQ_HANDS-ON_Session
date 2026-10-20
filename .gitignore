@@ -1,0 +1,96 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/.vinext/
+/out/
+
+# misc
+.DS_Store
+._*
+__MACOSX/
+*.pem
+/deploy/caddy-extra/*.caddy
+!/deploy/caddy-extra/.gitkeep
+/deploy/caddy-global-extra/*.caddy
+!/deploy/caddy-global-extra/.gitkeep
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# local environment
+.env*
+
+# deployment and generated files
+.vercel
+next-env.d.ts
+/dist/
+/.wrangler/
+/outputs/
+/work/
+
+/.package-store/
+!.env.example
+/TO_REMOVE/
+
+# Local Docker deployment configuration, secrets and bind-mounted state.
+/deploy.env
+/deploy/secrets/
+/secrets/
+/docker-data/
+
+.dev.vars*
+/wrangler.local.jsonc
+*.tsbuildinfo
+
+
+/processor/.venv/
+/processor/cache/
+/processor/outputs/
+**/__pycache__/
+
+# Model weights and compiled inference artifacts are never distributed with the site.
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.gguf
+*.h5
+*.hdf5
+*.tflite
+*.mlmodel
+*.pb
+*.engine
+*.plan
+*.trt
+*.bin
+*.pkl
+*.pickle
+*.joblib
+*.mar
+*.params
+*.pdparams
+*.pdmodel
+*.caffemodel
+*.weights
+*.mlpackage/
+pytorch_model.bin
+**/weights/
+**/checkpoints/
+
+/.pip-cache/

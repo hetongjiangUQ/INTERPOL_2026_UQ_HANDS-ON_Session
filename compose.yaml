@@ -1,0 +1,108 @@
+name: evidence-lab
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: evidence-lab:local
+    init: true
+    restart: unless-stopped
+    environment:
+      WORKSHOP_OPEN_ACCESS: "false"
+      PUBLIC_ORIGIN: "${PUBLIC_ORIGIN:?Set PUBLIC_ORIGIN in deploy.env}"
+      PUBLIC_IP_ORIGIN: "${PUBLIC_IP_ORIGIN:-}"
+      LOCAL_ADMIN_KEY_FILE: /run/secrets/local_admin_key
+      WORKSHOP_PARTICIPANT_PASSCODE_FILE: /run/secrets/participant_passcode
+      WRANGLER_SEND_METRICS: "false"
+      WRANGLER_WRITE_LOGS: "false"
+    secrets:
+      - local_admin_key
+      - participant_passcode
+    ports:
+      - "${APP_BIND_ADDRESS:-127.0.0.1}:${APP_PORT:-3001}:3001"
+    volumes:
+      - evidence_lab_state:/data/wrangler
+    read_only: true
+    tmpfs:
+      - /app/.wrangler:uid=10001,gid=10001,mode=0700
+      - /app/dist/server/.wrangler:uid=10001,gid=10001,mode=0700
+      - /run/evidence-lab:uid=10001,gid=10001,mode=0700
+      - /tmp:uid=10001,gid=10001,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    stop_grace_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3001/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
+      interval: 15s
+      timeout: 5s
+      start_period: 45s
+      retries: 4
+
+  caddy:
+    image: caddy:2.10.2-alpine
+    profiles:
+      - proxy
+    restart: unless-stopped
+    environment:
+      SITE_DOMAIN: "${SITE_DOMAIN:-localhost}"
+      LEGACY_SITE_DOMAIN: "${LEGACY_SITE_DOMAIN:-}"
+      SITE_IP: "${SITE_IP:-}"
+    depends_on:
+      app:
+        condition: service_healthy
+    ports:
+      - "${CADDY_HTTP_PORT:-80}:80"
+      - "${CADDY_HTTPS_PORT:-443}:443"
+      - "${CADDY_HTTPS_PORT:-443}:443/udp"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - type: bind
+        source: ./deploy/caddy-extra
+        target: /etc/caddy/extra
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./deploy/caddy-global-extra
+        target: /etc/caddy/global-extra
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./public/samples
+        target: /srv/samples
+        read_only: true
+        bind:
+          create_host_path: false
+      - caddy_data:/data
+      - caddy_config:/config
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+secrets:
+  local_admin_key:
+    file: "${LOCAL_ADMIN_KEY_FILE:?Set LOCAL_ADMIN_KEY_FILE in deploy.env}"
+  participant_passcode:
+    file: "${WORKSHOP_PARTICIPANT_PASSCODE_FILE:?Set WORKSHOP_PARTICIPANT_PASSCODE_FILE in deploy.env}"
+
+volumes:
+  evidence_lab_state:
+  caddy_data:
+  caddy_config:

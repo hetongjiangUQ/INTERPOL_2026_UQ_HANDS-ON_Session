@@ -1,0 +1,5 @@
+# Copy to deploy/caddy-extra/legacy-domain-redirect.caddy only when migrating
+# from an older hostname. Both variables must contain bare DNS names.
+{$LEGACY_SITE_DOMAIN} {
+	redir https://{$SITE_DOMAIN}{uri} permanent
+}

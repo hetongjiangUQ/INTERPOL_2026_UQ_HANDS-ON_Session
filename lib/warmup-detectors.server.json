@@ -1,0 +1,47 @@
+[
+  {
+    "schemaVersion": 1,
+    "model": "community",
+    "modelVersion": "Community Forensics CVPR2025; OwensLab/commfor-model-384 6076002bf0d9dd37537f965ee2f06f826c333b61; sha256 b89f36275f3bf5e2b040eee36597a8f19db051bff9a473a9cf7b2466284fb387",
+    "mediaSha256": "5cedd932471ae12a16be2d9f93ec245026df76742a5509dc7dc6e95d82e49177",
+    "score": 0.0007258256082423031,
+    "scoreType": "synthetic_sigmoid",
+    "preprocessing": "community-official-384-v1: PIL RGB, torchvision Resize(440) on shorter side with bilinear interpolation and antialias, CenterCrop(384), ToTensor range [0,1], ImageNet mean [0.485,0.456,0.406]/std [0.229,0.224,0.225]; no EXIF transpose; float32; one central crop.",
+    "createdAt": "2026-09-09T05:12:59.728588+00:00",
+    "note": "Uncalibrated synthetic-image score; higher leans synthetic. Not a probability, proof, or a face-swap/video-specific detector. A single central crop can omit peripheral evidence. Distribution shifts and transformations can cause mistakes."
+  },
+  {
+    "schemaVersion": 1,
+    "model": "spai",
+    "modelVersion": "SPAI CVPR2025; source 8ff7b3b6779b4fcb43cf313471d9cb1c62d129a4; author checkpoint sha256 24159f27d7c8c2cd0cb6c4019189eb89ad0874a0d9d15f8dc9afd39ca9648a55; CPU FP32",
+    "mediaSha256": "5cedd932471ae12a16be2d9f93ec245026df76742a5509dc7dc6e95d82e49177",
+    "score": 0.5268514156341553,
+    "scoreType": "synthetic_sigmoid",
+    "preprocessing": "spai-official-original-resolution-v1: PIL RGB without EXIF transpose; original resolution; centre reflection padding only if an axis is shorter than 224 px; float32 pixels /255; upstream 224x224 patches with stride 224, upstream five-crop fallback if fewer than four patches; spectral masking radius 16; learned spectral context attention aggregation; sigmoid of image-level synthetic logit. Patch feature extraction in batches of eight. Incomplete edge patches are omitted by the upstream grid when the five-crop fallback does not apply.",
+    "createdAt": "2026-09-09T06:11:06.372265+00:00",
+    "note": "Uncalibrated synthetic-image score, not a probability or proof. Higher leans synthetic. This spectral model is a different learned signal from CLIP features; compression, resizing, camera processing and new generators can cause errors. Image-level model, not a manipulation mask or dedicated face-swap detector."
+  },
+  {
+    "schemaVersion": 1,
+    "model": "aide",
+    "modelVersion": "AIDE ICLR2025; GenImage checkpoint; source 6725b710d5c437ab2f59792908ce0377dfc907de; sha256 f084346dfb0cd05ab4201fe82a62d4f1b4381ee28f2c8295d6cb14d559a9ff16",
+    "mediaSha256": "5cedd932471ae12a16be2d9f93ec245026df76742a5509dc7dc6e95d82e49177",
+    "score": 0.05467205494642258,
+    "scoreType": "synthetic_sigmoid",
+    "samples": null,
+    "createdAt": "2026-09-09T06:13:02.225810+00:00",
+    "preprocessing": "aide-official-genimage-v1: PIL RGB without EXIF transpose, ToTensor [0,1]; original 32x32 DCT windows at stride16, six frequency bands select two lowest and two highest frequency patches; each patch and the full image bilinearly resized to 256x256 with torchvision antialias=True and ImageNet normalization; author SRM filters, two ResNet50 noise experts and frozen CLIP ConvNeXt-XXL semantic trunk; float32 CPU; class-1 softmax over [real,fake] logits. No resize before patch selection.",
+    "note": "Uncalibrated synthetic-image score, not a probability. Higher leans synthetic. Hybrid learned noise and semantic evidence; new generators and image editing can cause failures. No pixel localisation."
+  },
+  {
+    "schemaVersion": 1,
+    "model": "univfd",
+    "modelVersion": "UniversalFakeDetect 030495aea3300a8b54c0ec37ec7fe1dd7e63c619; CLIP b8cca3fd41ae0c99ba7e8951adf17d267cdb84cd88be6f7c2e0eca1737a03836",
+    "preprocessing": "ufd-original-v1: RGB, torchvision CenterCrop(224), no resize or EXIF transpose, CLIP mean/std, raw non-unit-normalized CLIP features, linear head sigmoid. Single image.",
+    "mediaSha256": "5cedd932471ae12a16be2d9f93ec245026df76742a5509dc7dc6e95d82e49177",
+    "createdAt": "2026-09-09T06:00:33.879495+00:00",
+    "score": 0.000509269826579839,
+    "scoreType": "synthetic_sigmoid",
+    "note": "Actual original-image measurement from the retained experiment package; uncalibrated output."
+  }
+]

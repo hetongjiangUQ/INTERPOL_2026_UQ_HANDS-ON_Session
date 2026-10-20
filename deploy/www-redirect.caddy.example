@@ -1,0 +1,5 @@
+# Copy to deploy/caddy-extra/www-redirect.caddy when the canonical site should
+# use its apex hostname while retaining the conventional www alias.
+www.{$SITE_DOMAIN} {
+	redir https://{$SITE_DOMAIN}{uri} permanent
+}

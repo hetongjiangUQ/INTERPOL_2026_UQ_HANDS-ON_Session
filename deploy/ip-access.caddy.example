@@ -1,0 +1,10 @@
+# Copy to deploy/caddy-extra/ip-access.caddy only when direct-IP HTTPS is wanted.
+# Set SITE_IP and PUBLIC_IP_ORIGIN in deploy.env; retain the domain configuration.
+{$SITE_IP} {
+	tls {
+		issuer acme https://acme-v02.api.letsencrypt.org/directory {
+			profile shortlived
+		}
+	}
+	import workshop_routes
+}

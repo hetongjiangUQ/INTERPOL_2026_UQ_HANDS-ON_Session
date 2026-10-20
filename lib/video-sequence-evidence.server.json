@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 1,
+  "computedDate": "2026-09-28",
+  "run": {
+    "summarySha256": "48f73f6648e62d6671dcc64f5e2a7d9bded49bd6968c6fce86e14419653e0a5c",
+    "gpu": "NVIDIA GeForce RTX 5090",
+    "gpuMemoryMiB": 32607,
+    "driver": "591.86"
+  },
+  "cases": [
+    {
+      "exerciseId": "quiz-video-authentic-hard",
+      "mediaSha256": "7d4cc1bf7325dfd2222fd5194c05cc07ca194436489c2de53a75c0961429c036",
+      "results": [
+        {
+          "method": "d3",
+          "rawScore": 5.080155849456787,
+          "scoreLabel": "Raw second-order temporal variation",
+          "direction": "Higher is more real-like under D3; lower is more fully-generated-like.",
+          "interpretation": "D3 measures the standard deviation of second-order temporal feature distances. This is an unbounded, model-specific statistic.",
+          "limitations": "Not a probability, confidence, or universal threshold. D3 targets fully generated video; cross-task outputs are identified separately.",
+          "scope": "primary-task",
+          "repositoryRevision": "c798fbc57fe0c4198d63a73732c2c0f9e4b4816c",
+          "sourceResultSha256": "5ef813e53a181e39b97dd9cd3db46550a51e21345243138a95532a271214a853",
+          "runnerSha256": "77ad0209e25b431d0265dcc09dfe68dfc607a2b9d7f880e61d9e4982ae26e476",
+          "encoder": "microsoft/xclip-base-patch16",
+          "encoderRevision": "d6184e3fd8780d04c85d0f1eabe5f94bf44d98f6",
+          "framesSampled": 16,
+          "samplingFps": 8,
+          "sampleStartSeconds": 0,
+          "approximateCoverageSeconds": 2,
+          "inferenceSeconds": 0.1871221999899717
+        },
+        {
+          "method": "pwtf-dvd",
+          "rawScore": 0.0014261669387261187,
+          "scoreLabel": "Mean fake-class model output",
+          "direction": "Higher is more face-forgery-like under PwTF-DVD.",
+          "interpretation": "The saved value is the arithmetic mean of sigmoid-transformed fake-class outputs over overlapping tracked-face clips.",
+          "limitations": "Not a calibrated probability or confidence. No workshop decision threshold is applied, and this result must not be averaged with another detector.",
+          "scope": "primary-task",
+          "repositoryRevision": "02e810536e01618c5463fb4ac907314111544563",
+          "sourceResultSha256": "3fa97c5e61ba2deec5ce78a484808073228a7cad09c1ae2a996a0d8997e59c63",
+          "runnerSha256": "f1bac16b2ad4988e1ef0a4731aff57f2dfac7097ca642c4ea72f1abcf8aceeef",
+          "decodedFrames": 105,
+          "faceTracks": 2,
+          "clipCount": 43,
+          "clipFrames": 32,
+          "clipStride": 1
+        }
+      ]
+    },
+    {
+      "exerciseId": "quiz-video-synthetic-hard",
+      "mediaSha256": "d557d12335e607e4fe9f05655ac6865762ac9a97596eb9f06aaec8685ba13df5",
+      "results": [
+        {
+          "method": "d3",
+          "rawScore": 0.6578940749168396,
+          "scoreLabel": "Raw second-order temporal variation",
+          "direction": "Higher is more real-like under D3; lower is more fully-generated-like.",
+          "interpretation": "D3 measures the standard deviation of second-order temporal feature distances. This is an unbounded, model-specific statistic.",
+          "limitations": "Not a probability, confidence, or universal threshold. D3 targets fully generated video; cross-task outputs are identified separately.",
+          "scope": "primary-task",
+          "repositoryRevision": "c798fbc57fe0c4198d63a73732c2c0f9e4b4816c",
+          "sourceResultSha256": "5ef813e53a181e39b97dd9cd3db46550a51e21345243138a95532a271214a853",
+          "runnerSha256": "77ad0209e25b431d0265dcc09dfe68dfc607a2b9d7f880e61d9e4982ae26e476",
+          "encoder": "microsoft/xclip-base-patch16",
+          "encoderRevision": "d6184e3fd8780d04c85d0f1eabe5f94bf44d98f6",
+          "framesSampled": 16,
+          "samplingFps": 8,
+          "sampleStartSeconds": 0,
+          "approximateCoverageSeconds": 2,
+          "inferenceSeconds": 0.02039140000124462
+        },
+        {
+          "method": "pwtf-dvd",
+          "rawScore": 0.018978793130005795,
+          "scoreLabel": "Mean fake-class model output",
+          "direction": "Higher is more face-forgery-like under PwTF-DVD.",
+          "interpretation": "The saved value is the arithmetic mean of sigmoid-transformed fake-class outputs over overlapping tracked-face clips.",
+          "limitations": "Not a calibrated probability or confidence. No workshop decision threshold is applied, and this result must not be averaged with another detector.",
+          "scope": "outside-primary-task",
+          "scopeNote": "PwTF-DVD targets temporal face forgery. This fully generated Sora clip is a cross-task stress test, so the output is exploratory rather than a validated fully-generated-video verdict.",
+          "repositoryRevision": "02e810536e01618c5463fb4ac907314111544563",
+          "sourceResultSha256": "a05c553163390800436defa66834078e6e706de78eae618a10577009530fc9cd",
+          "runnerSha256": "f1bac16b2ad4988e1ef0a4731aff57f2dfac7097ca642c4ea72f1abcf8aceeef",
+          "decodedFrames": 150,
+          "faceTracks": 1,
+          "clipCount": 119,
+          "clipFrames": 32,
+          "clipStride": 1
+        }
+      ]
+    },
+    {
+      "exerciseId": "quiz-faceswap-video-v1",
+      "mediaSha256": "5d716680050e2c459b5bf0d30449689512dfa9f44510a157e2b4a73479a36f42",
+      "results": [
+        {
+          "method": "d3",
+          "rawScore": 2.150648832321167,
+          "scoreLabel": "Raw second-order temporal variation",
+          "direction": "Higher is more real-like under D3; lower is more fully-generated-like.",
+          "interpretation": "D3 measures the standard deviation of second-order temporal feature distances. This is an unbounded, model-specific statistic.",
+          "limitations": "Not a probability, confidence, or universal threshold. No workshop decision threshold is applied, and this result must not be averaged with another detector.",
+          "scope": "outside-primary-task",
+          "scopeNote": "D3 targets fully generated video. A face swap retains most source-video content, so treat this as an exploratory fully-generated-video signal, not a face-swap verdict.",
+          "repositoryRevision": "c798fbc57fe0c4198d63a73732c2c0f9e4b4816c",
+          "sourceResultSha256": "5ef813e53a181e39b97dd9cd3db46550a51e21345243138a95532a271214a853",
+          "runnerSha256": "77ad0209e25b431d0265dcc09dfe68dfc607a2b9d7f880e61d9e4982ae26e476",
+          "encoder": "microsoft/xclip-base-patch16",
+          "encoderRevision": "d6184e3fd8780d04c85d0f1eabe5f94bf44d98f6",
+          "framesSampled": 16,
+          "samplingFps": 8,
+          "sampleStartSeconds": 13,
+          "approximateCoverageSeconds": 2,
+          "inferenceSeconds": 0.02043259999481961
+        },
+        {
+          "method": "pwtf-dvd",
+          "rawScore": 0.5936067346781587,
+          "scoreLabel": "Mean fake-class model output",
+          "direction": "Higher is more face-forgery-like under PwTF-DVD.",
+          "interpretation": "The saved value is the arithmetic mean of sigmoid-transformed fake-class outputs over overlapping tracked-face clips.",
+          "limitations": "Not a calibrated probability or confidence. No workshop decision threshold is applied, and this result must not be averaged with another detector.",
+          "scope": "primary-task",
+          "repositoryRevision": "02e810536e01618c5463fb4ac907314111544563",
+          "sourceResultSha256": "48990b6297d68acabd00b2b7bfa7d15455c2b19b7977709ca776c4d14b0a09f4",
+          "runnerSha256": "f1bac16b2ad4988e1ef0a4731aff57f2dfac7097ca642c4ea72f1abcf8aceeef",
+          "decodedFrames": 1593,
+          "faceTracks": 1,
+          "clipCount": 1562,
+          "clipFrames": 32,
+          "clipStride": 1
+        }
+      ]
+    },
+    {
+      "exerciseId": "quiz-faceswap-video-v2",
+      "mediaSha256": "ee2aac5dfffb4a07bcc8206297325244ec85cbbcd1da05bf1a8a15b1c080e632",
+      "computedDate": "2026-10-11",
+      "run": {
+        "summarySha256": "f8204722803e0b92daa79420bed0b9703a729226a3edb0590bafdecc83b21a38",
+        "gpu": "NVIDIA GeForce RTX 5090",
+        "gpuMemoryMiB": 32607,
+        "driver": "591.86"
+      },
+      "results": [
+        {
+          "method": "d3",
+          "rawScore": 5.379194259643555,
+          "scoreLabel": "Raw second-order temporal variation",
+          "direction": "Higher is more real-like under D3; lower is more fully-generated-like.",
+          "interpretation": "D3 measures the standard deviation of second-order temporal feature distances. This is an unbounded, model-specific statistic.",
+          "limitations": "Not a probability, confidence, or universal threshold. D3 targets fully generated video; cross-task outputs are identified separately.",
+          "scope": "outside-primary-task",
+          "repositoryRevision": "c798fbc57fe0c4198d63a73732c2c0f9e4b4816c",
+          "sourceResultSha256": "c63911ad7ca39e9de9d5e4cd64615576a701c7f907467a1bbfc78753587c639e",
+          "runnerSha256": "41d3e2f2ffc26c9f8d5593d3d7ef98e0f228da8a6273d42dbd10308a8b7b557b",
+          "encoder": "microsoft/xclip-base-patch16",
+          "encoderRevision": "d6184e3fd8780d04c85d0f1eabe5f94bf44d98f6",
+          "framesSampled": 16,
+          "samplingFps": 8,
+          "sampleStartSeconds": 0,
+          "approximateCoverageSeconds": 2,
+          "inferenceSeconds": 0.2641871000014362,
+          "scopeNote": "D3 targets fully generated videos: this face-swap result is exploratory, not a face-swap verdict."
+        },
+        {
+          "method": "pwtf-dvd",
+          "rawScore": 0.00416635237662576,
+          "scoreLabel": "Mean fake-class model output",
+          "direction": "Higher is more face-forgery-like under PwTF-DVD.",
+          "interpretation": "The saved value is the arithmetic mean of sigmoid-transformed fake-class outputs over overlapping tracked-face clips.",
+          "limitations": "Not a calibrated probability or confidence. No workshop decision threshold is applied, and this result must not be averaged with another detector.",
+          "scope": "primary-task",
+          "repositoryRevision": "02e810536e01618c5463fb4ac907314111544563",
+          "sourceResultSha256": "930e1825d9c9fe2e4f2b9d1de28bba2bae2a006e3769e8ef869fca09a031bc84",
+          "runnerSha256": "41d3e2f2ffc26c9f8d5593d3d7ef98e0f228da8a6273d42dbd10308a8b7b557b",
+          "decodedFrames": 113,
+          "faceTracks": 1,
+          "clipCount": 82,
+          "clipFrames": 32,
+          "clipStride": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+export async function api<T=any>(path:string,init?:RequestInit):Promise<T>{const r=await fetch('/api/'+path,{...init,headers:{...(init?.body&&typeof init.body==='string'?{'Content-Type':'application/json'}:{}),...init?.headers}});const data=await r.json() as T & {error?:string};if(!r.ok)throw new Error(data.error||'Request failed.');return data;}
+export const post=<T=any>(path:string,data:unknown)=>api<T>(path,{method:'POST',body:JSON.stringify(data)});

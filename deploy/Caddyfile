@@ -1,0 +1,33 @@
+{
+	admin off
+	# Optional global settings, such as a no-SNI fallback for direct-IP HTTPS.
+	# An empty directory leaves domain-only deployments unchanged.
+	import /etc/caddy/global-extra/*.caddy
+}
+
+(workshop_routes) {
+	header {
+		-Server
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+
+	handle /samples/* {
+		root * /srv
+		file_server
+	}
+
+	handle {
+		encode zstd gzip
+		reverse_proxy app:3001 {
+			header_up X-Evidence-Lab-Origin "{scheme}://{host}"
+		}
+	}
+}
+
+{$SITE_DOMAIN} {
+	import workshop_routes
+}
+
+# An empty directory leaves domain-only deployments unchanged.
+import /etc/caddy/extra/*.caddy

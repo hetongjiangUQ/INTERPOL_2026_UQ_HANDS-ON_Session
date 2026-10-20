@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1788927934955,
+      "tag": "0000_massive_wolfpack",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1788936464957,
+      "tag": "0001_flaky_mephistopheles",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1789012874140,
+      "tag": "0002_productive_the_fallen",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1790581794574,
+      "tag": "0003_clammy_lake",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1790650126204,
+      "tag": "0004_lowly_blacklash",
+      "breakpoints": true
+    }
+  ]
+}

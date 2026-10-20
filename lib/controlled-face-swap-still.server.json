@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-09-21T04:50:01.990193+00:00",
+  "source": {
+    "title": "FaceSwapAI Controlled Photo Face-Swap Pose Study",
+    "version": "1.0.0",
+    "creator": "FaceSwapAI Editorial / DeepSwap LLC",
+    "studyUrl": "https://faceswapai.com/resources/photo-face-swap-pose-study",
+    "datasetUrl": "https://faceswapai.com/datasets/photo-pose-study-v1.json",
+    "licence": "CC BY 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "groundTruthBasis": "The publisher's versioned JSON records the neutral file as the output of a completed paid still-photo face-swap task. This is publisher-supplied process evidence with exact hashes, not signed C2PA provenance or an independently replayed generation.",
+    "methodStatus": "The publisher identifies the production route as a face-swap service but does not identify the configured upstream provider or model used for this task.",
+    "identityStatus": "The publisher states that the source and target are different purpose-built synthetic adult identities and that no customer media, public figure or face-recognition identity label is used. On that account, no identifiable human subject is intended; this project did not independently verify identity provenance.",
+    "reviewStatus": "Public review candidate under the publisher-declared CC BY 4.0 data licence. Vendor-published rather than peer-reviewed; retain attribution, licence link, exact-file hashes, provider-rights caveat and the synthetic-input confound.",
+    "sourceSha256": "5f6aa1a771c4940ed053d2dce3932f5c360840511e80893e72b507c5eaa05b59",
+    "targetSha256": "63c09dbb71e930e48d2cf7d8075a7fbfe0c475c76e1b982c873b9f808a623f32"
+  },
+  "case": {
+    "id": "quiz-faceswap-still-v3",
+    "mediaId": "faceswapai-photo-pose-neutral-output-v1",
+    "kind": "image",
+    "title": "Identity evidence A",
+    "url": "/samples/faceswap/faceswapai-photo-pose-neutral-v1.png",
+    "mime": "image/png",
+    "bytes": 686653,
+    "sha256": "1ba3d918c6c3e6f660dad8ee8edb1317ca87195ce344e36995bcf17379e0b802",
+    "truth": "manipulated",
+    "results": [
+      {
+        "schemaVersion": 1,
+        "model": "univfd",
+        "modelVersion": "UniversalFakeDetect 030495aea3300a8b54c0ec37ec7fe1dd7e63c619; CLIP b8cca3fd41ae0c99ba7e8951adf17d267cdb84cd88be6f7c2e0eca1737a03836",
+        "mediaSha256": "1ba3d918c6c3e6f660dad8ee8edb1317ca87195ce344e36995bcf17379e0b802",
+        "preprocessing": "ufd-original-v1: RGB, torchvision CenterCrop(224), no resize or EXIF transpose, CLIP mean/std, raw non-unit-normalized CLIP features, linear head sigmoid. Single image.",
+        "createdAt": "2026-09-21T04:50:01.990193+00:00",
+        "score": 0.4772677719593048,
+        "scoreType": "synthetic_sigmoid",
+        "note": "Uncalibrated model score. Higher leans synthetic; not a probability or proof. Actual inference on saved bytes. The published source and target portraits were already synthetic identities, so this output may reflect synthesis cues that predate the face swap."
+      },
+      {
+        "schemaVersion": 1,
+        "model": "community",
+        "modelVersion": "Community Forensics CVPR2025; OwensLab/commfor-model-384 6076002bf0d9dd37537f965ee2f06f826c333b61; sha256 b89f36275f3bf5e2b040eee36597a8f19db051bff9a473a9cf7b2466284fb387",
+        "mediaSha256": "1ba3d918c6c3e6f660dad8ee8edb1317ca87195ce344e36995bcf17379e0b802",
+        "preprocessing": "community-official-384-v1: PIL RGB, torchvision Resize(440) on the shorter side with bilinear interpolation and antialias, CenterCrop(384), ToTensor range [0,1], ImageNet mean [0.485,0.456,0.406]/std [0.229,0.224,0.225]; no EXIF transpose; float32; one central crop per image/frame.",
+        "createdAt": "2026-09-21T04:50:01.990193+00:00",
+        "score": 0.43610450625419617,
+        "scoreType": "synthetic_sigmoid",
+        "note": "Uncalibrated model score. Higher leans synthetic; not a probability or proof. Actual inference on saved bytes. The published source and target portraits were already synthetic identities, so this output may reflect synthesis cues that predate the face swap."
+      },
+      {
+        "schemaVersion": 1,
+        "model": "spai",
+        "modelVersion": "SPAI CVPR2025; source 8ff7b3b6779b4fcb43cf313471d9cb1c62d129a4; author checkpoint sha256 24159f27d7c8c2cd0cb6c4019189eb89ad0874a0d9d15f8dc9afd39ca9648a55; CPU FP32",
+        "mediaSha256": "1ba3d918c6c3e6f660dad8ee8edb1317ca87195ce344e36995bcf17379e0b802",
+        "preprocessing": "spai-official-original-resolution-v1: PIL RGB without EXIF transpose; original resolution; centre reflection padding only if an axis is shorter than 224 px; float32 pixels /255; upstream 224x224 patches with stride 224, upstream five-crop fallback if fewer than four patches; spectral masking radius 16; learned spectral context attention aggregation; sigmoid of image-level synthetic logit. Patch feature extraction in batches of eight. Incomplete edge patches are omitted by the upstream grid when the five-crop fallback does not apply.",
+        "createdAt": "2026-09-21T04:50:01.990193+00:00",
+        "score": 0.9999997615814209,
+        "scoreType": "synthetic_sigmoid",
+        "note": "Uncalibrated synthetic-image score, not a probability or proof. Higher leans synthetic. This spectral model is a different learned signal from CLIP features; compression, resizing, camera processing and new generators can cause errors. Image-level model, not a manipulation mask or dedicated face-swap detector. The published source and target portraits were already synthetic identities, so this output may reflect synthesis cues that predate the face swap."
+      },
+      {
+        "schemaVersion": 1,
+        "model": "aide",
+        "modelVersion": "AIDE ICLR2025; GenImage checkpoint; source 6725b710d5c437ab2f59792908ce0377dfc907de; sha256 f084346dfb0cd05ab4201fe82a62d4f1b4381ee28f2c8295d6cb14d559a9ff16",
+        "mediaSha256": "1ba3d918c6c3e6f660dad8ee8edb1317ca87195ce344e36995bcf17379e0b802",
+        "preprocessing": "aide-official-genimage-v1: PIL RGB without EXIF transpose, ToTensor [0,1]; original 32x32 DCT windows at stride16, six frequency bands select two lowest and two highest frequency patches; each patch and the full image bilinearly resized to 256x256 with torchvision antialias=True and ImageNet normalization; author SRM filters, two ResNet50 noise experts and frozen CLIP ConvNeXt-XXL semantic trunk; float32 CPU; class-1 softmax over [real,fake] logits. No resize before patch selection.",
+        "createdAt": "2026-09-21T04:50:01.990193+00:00",
+        "score": 0.07396391034126282,
+        "scoreType": "synthetic_sigmoid",
+        "note": "Uncalibrated class-1 softmax (fake), equivalent to sigmoid of fake-minus-real logits. Not a probability or authenticity verdict. The published source and target portraits were already synthetic identities, so this output may reflect synthesis cues that predate the face swap."
+      },
+      {
+        "schemaVersion": 1,
+        "model": "gend",
+        "modelVersion": "GenD CLIP-L/14 WACV2026 891ce014a0308386c4d7d25b3dcf436a22db5504; MIT YuNet 47534e27c9851bb1128ccc0102f1145e27f23f98",
+        "mediaSha256": "1ba3d918c6c3e6f660dad8ee8edb1317ca87195ce344e36995bcf17379e0b802",
+        "preprocessing": "gend-yunet-v1: YuNet 2023mar, threshold 0.8, maximum image dimension 640; largest face; official GenD five-landmark alignment scale 1.3 and estimated square size; CLIP bicubic resize and centre crop 224, CLIP mean/std; L2-normalized pooled features, released linear head, softmax class 1; float32 CPU. One RGB image; no EXIF transpose.",
+        "createdAt": "2026-09-21T04:50:01.990193+00:00",
+        "score": 0.7610158324241638,
+        "scoreType": "manipulation_score",
+        "note": "Uncalibrated manipulation score, not a probability or forensic verdict. YuNet preprocessing differs from the research paper. Face-manipulation scope; no temporal or audio analysis. The largest face may switch between people; identities are not tracked. Validate with authentic controls and the workshop generators. The published source and target portraits were already synthetic identities, so this output may reflect synthesis cues that predate the face swap."
+      },
+      {
+        "schemaVersion": 1,
+        "model": "fatformer",
+        "modelVersion": "FatFormer CVPR 2024; ProGAN four-class checkpoint; source febc24c333d38b70fb8a00662ff67a38f681ad42; checkpoint sha256 3b904401ad4ce7d0bc33661e83742ec4b659850c076b73cd544e87e26d8cb3db",
+        "mediaSha256": "1ba3d918c6c3e6f660dad8ee8edb1317ca87195ce344e36995bcf17379e0b802",
+        "preprocessing": "PIL RGB; resize exactly 256x256 with PIL bilinear interpolation; center crop224; ToTensor; ImageNet mean [0.485,0.456,0.406], std [0.229,0.224,0.225]; official test dataset transform",
+        "createdAt": "2026-09-21T04:50:01.990193+00:00",
+        "score": 0.9999942779541016,
+        "scoreType": "synthetic_softmax",
+        "note": "Uncalibrated class-1 softmax output; not posterior authenticity probability. The published source and target portraits were already synthetic identities, so this output may reflect synthesis cues that predate the face swap."
+      }
+    ],
+    "prompt": "Save your first judgement while viewing the complete portrait at 100%. Then inspect the eyes, nose, mouth, jaw and face-to-hair boundary at one chosen zoom, and compare colour and edge/detail views before reading the six saved model outputs. Which observations support local identity replacement, and which could come from the already-synthetic source or target portraits?",
+    "explanation": "Publisher-documented label: completed still-photo face swap. This is the unchanged 1280×720 neutral PNG from FaceSwapAI Controlled Photo Face-Swap Pose Study v1.0.0 (2026-07-15); the publisher declares the research assets CC BY 4.0. Its record describes a paid production task transferring one purpose-built synthetic adult identity into a different purpose-built synthetic adult target. The file is an independent still task, not a frame from the workshop video. On these exact bytes, UniversalFakeDetect returns 0.4773, Community Forensics 0.4361, SPAI 1.0000, AIDE 0.0740, GenD 0.7610, and FatFormer 1.0000. These model-specific outputs disagree and are not calibrated probabilities or votes. Five models broadly assess synthetic/forged images; GenD has the narrower face-manipulation scope. Because both input portraits were already synthetic, none of the six outputs isolates the face-swap operation from pre-existing synthesis cues. The exact task record and hashes are useful publisher-supplied process evidence, but they are not signed provenance and this project did not independently replay the generation. The public record does not name the upstream provider, model or provider-specific rights. This vendor-published single case is not a peer-reviewed benchmark or an accuracy estimate."
+  }
+}

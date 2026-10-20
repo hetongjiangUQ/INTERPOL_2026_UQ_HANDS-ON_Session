@@ -1,0 +1,4 @@
+# Copy to deploy/caddy-global-extra/ip-default-sni.caddy only when direct-IP
+# HTTPS is enabled. Literal-IP clients commonly omit SNI, so Caddy needs the
+# public IP certificate as the default for that otherwise unnamed handshake.
+default_sni {$SITE_IP}
