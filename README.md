@@ -10,9 +10,19 @@ The website contains Detection lab (ten quizzes), Watermark lab and the audience
 
 ## Current development workflow
 
-Develop directly in this repository. `before_remove_backend_extra` preserves the complete pre-cleanup version; `main` contains the simplified delivery. The previous `website/deepfake/training-site/` folder is historical reference only.
+This standalone repository preserves the 19 October final copy on `main`. The
+`revealed` branch is an answer-review version: each quiz ends with a **Reveal
+answer / Hide answer** toggle, and the top of the page has **Final scoreboard**,
+**Reference list**, and **Instruction manual** buttons. Inspection tools remain
+available without answering. Quiz answer submission is disabled in both the
+participant interface and API. Answers require an exact match to the reviewed
+media hash; references contain answer spoilers.
 
-Admin flow: sign in, review the answer key, then **Start tracker**. Participants save all ten answers and confirm their final submission. Ranking uses exact classification correctness, then earliest final submission. **Reveal results & close submissions** releases scores. CSV export is available. Clearing participant data requires the admin passcode, acknowledgement checkbox and two confirmations; it does not clear media/evidence. Export first.
+Participant sign-in is retained. The scoreboard displays stored results only
+after an instructor publishes them, and exposes only rank, nickname and score.
+This local source copy includes no event responses. Existing instructor controls
+and CSV export remain available for retained data; the review branch collects no
+new quiz responses. To run a submission-based workshop, use `main`.
 
 Manual observations, detector outputs, watermarks, provenance, and source labels remain separate evidence; an unusual pattern is not proof of synthesis. No live inference occurs.
 

@@ -13,7 +13,7 @@
     "start": "wrangler dev --config dist/server/wrangler.json",
     "lint": "oxlint",
     "format": "oxfmt",
-    "test": "node --experimental-strip-types --test tests/quiz8-replacement.test.ts tests/current-site.test.ts tests/domain.test.ts tests/video-sequence-evidence.test.ts tests/no-model-artifacts.test.ts tests/watermark.test.ts tests/local-setup.test.mjs tests/participant-access.test.ts tests/docker.test.ts tests/public-origin.test.ts tests/answer-options.test.ts tests/tracker.test.ts tests/final-scope.test.ts",
+    "test": "node --experimental-strip-types --test tests/quiz8-replacement.test.ts tests/current-site.test.ts tests/domain.test.ts tests/video-sequence-evidence.test.ts tests/no-model-artifacts.test.ts tests/watermark.test.ts tests/local-setup.test.mjs tests/participant-access.test.ts tests/docker.test.ts tests/public-origin.test.ts tests/answer-options.test.ts tests/tracker.test.ts tests/final-scope.test.ts tests/review.test.ts",
     "setup:local": "node scripts/setup-local.mjs",
     "db:local": "wrangler d1 migrations apply DB --local --config wrangler.local.jsonc"
   },

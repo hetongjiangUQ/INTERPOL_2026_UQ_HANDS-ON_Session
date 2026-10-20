@@ -16,8 +16,8 @@ test('final-submit gate requires all saved quizzes, active session and no unsave
  const component=readFileSync(new URL('../components/workshop-tracker.tsx',import.meta.url),'utf8');
  assert.match(component,/disabled=\{!ready\|\|!confirm\|\|busy\}/);
  const training=readFileSync(new URL('../components/training.tsx',import.meta.url),'utf8');
- assert(training.indexOf('<FinalSubmission')<training.indexOf('<div className="practice-progress">'));
- assert.equal(training.match(/<FinalSubmission/g)?.length,1);
+ assert.doesNotMatch(training,/<FinalSubmission|saveDraft|Save answer/);
+ assert.match(training,/Reveal answer/);
 });
 
 function fixture(){

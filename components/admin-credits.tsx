@@ -4,13 +4,13 @@ import {api} from '@/lib/client';
 import type {DetectorAcknowledgement} from '@/lib/acknowledgements';
 import {CLASSIFICATION_GUIDANCE} from '@/lib/domain';
 type Credits={detectors:DetectorAcknowledgement[];policy:{heading:string;summary:string;warning:string};evidence:string[];media:{title:string;creator:string;source:string|null;license:string;licenseUrl:string|null;changes:string}[]};
-export function AdminCredits(){
+export function AdminCredits({review=false}:{review?:boolean}={}){
  const [data,setData]=useState<Credits|null>(null),[error,setError]=useState('');
- useEffect(()=>{let active=true;api<Credits>('admin/credits').then(d=>{if(active)setData(d);}).catch(e=>{if(active)setError(e.message);});return()=>{active=false;};},[]);
+ useEffect(()=>{let active=true;api<Credits>(review?'review/references':'admin/credits').then(d=>{if(active)setData(d);}).catch(e=>{if(active)setError(e.message);});return()=>{active=false;};},[review]);
  if(error)return <p className="error" role="alert">{error}</p>;
  if(!data)return <p role="status">Loading credits…</p>;
  return <section className="panel"><h2>Credits and sources</h2>
-  <p>Media descriptions include source labels and are for instructor review.</p>
+  <p>{review?'These references include source labels and quiz answers.':'Media descriptions include source labels and are for instructor review.'}</p>
   <p>{CLASSIFICATION_GUIDANCE}</p>
   <h3>{data.policy.heading}</h3><p>{data.policy.summary}</p><p>{data.policy.warning}</p>
   <h3>Detection tools</h3>{data.detectors.map(d=><article key={d.name}><h4>{d.name} · {d.publication}</h4><p><a href={d.paper} target="_blank" rel="noreferrer">Paper</a> · <a href={d.repository} target="_blank" rel="noreferrer">Official repository</a></p><p>{d.scope} {d.scoreMeaning}</p></article>)}

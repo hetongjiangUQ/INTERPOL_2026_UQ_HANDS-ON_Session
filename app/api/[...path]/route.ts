@@ -1,6 +1,7 @@
 import {saveAnswer} from '@/lib/save-answer.server';
 import {DETECTORS,WEIGHT_POLICY,EVIDENCE_SEPARATION,CURRENT_MEDIA_TITLES} from '@/lib/acknowledgements';
 import mediaCredits from '@/lib/sample-credits.json';
+import {reviewAnswer,publicScoreboard} from '@/lib/review.server';
 import {buildTrackerKey,startTracker,trackerState,trackerStatus,submitTracker,trackerDashboard,prepareReset,confirmReset,clearTracker} from '@/lib/tracker.server';
 import {portraitMedia,portraitQuizCase,portraitQuizEvidence} from '@/lib/portrait-lab.server';
 import {ensureExamples,bundledUrl} from '@/lib/examples.server';
@@ -61,6 +62,21 @@ async function handler(request:Request){
     }
     if(method==='POST'&&path[0]==='logout')return json({ok:true},200,{'Set-Cookie':setCookie(request,'lab_admin','',0)});
     if(path[0]!=='admin')await participantOrInstructor(request);
+    if(method==='POST'&&(path[0]==='assessment'||(path[0]==='tracker'&&path[1]==='submit')))
+      throw new HttpError(403,'This review website does not accept quiz submissions.');
+    if(method==='GET'&&path[0]==='review'){
+      if(path[1]==='references')return json({detectors:DETECTORS,policy:WEIGHT_POLICY,evidence:EVIDENCE_SEPARATION,media:mediaCredits.filter(item=>CURRENT_MEDIA_TITLES.has(item.title))});
+      if(path[1]==='scoreboard')return json(publicScoreboard(await trackerDashboard(db())));
+      if(path[1]==='answer'){
+        const row=await exercise(path[2]);
+        const config=(await readWorkshop(db())).config;
+        if(!row.published||!practiceConfig(config,path[2]).enabled)throw new HttpError(404,'Exercise unavailable.');
+        const answer=reviewAnswer(path[2],String(row.sha256));
+        if(!answer)throw new HttpError(409,'No verified answer is available for this media version.');
+        return json(answer);
+      }
+      throw new HttpError(404,'Review endpoint not found.');
+    }
     if(path[0]==='tracker'){
       const pid=await participant(request);
       if(method==='GET')return json(await trackerStatus(db(),pid));

@@ -84,8 +84,8 @@ export function ParticipantAccessGate({ children }: { children: ReactNode }) {
               required
             />
             <p className="small muted entry-help">
-              Use an informal name rather than your full real name. It will be
-              stored with your workshop answers.
+              Use an informal name rather than your full real name. It identifies
+              this browser session; this review version collects no quiz answers.
             </p>
             <label className="field-label" htmlFor="participant-passcode">
               Workshop passcode
