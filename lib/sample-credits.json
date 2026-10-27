@@ -85,7 +85,7 @@
     "source": null,
     "license": "Creator-authorised repository/workshop distribution (confirmed 29 September 2026); no general reuse licence",
     "licenseUrl": null,
-    "changes": "Contributor-declared AI-generated portrait base followed by a face swap. The contributor stated that they created the case and expressly authorised this 1024 × 1024 participant JPEG for this repository. The private original PNG is not bundled; the derivative is a high-quality 4:4:4 JPEG with metadata stripped and no resize or crop. The process record is not signed provenance and was not independently replayed."
+    "changes": "Contributor-declared AI-generated portrait base followed by a face swap. The contributor authorised this 1024 × 1024 participant JPEG and, on 27 October 2026, a metadata-stripped source PNG copy at source-media/quiz-09/example12_swapped.png for this repository. The participant JPEG remains the high-quality 4:4:4, no-resize detector input. The process record is not signed provenance and was not independently replayed."
   },
   {
     "title": "Image evidence D — user-supplied camera photograph",
@@ -93,6 +93,6 @@
     "source": null,
     "license": "Creator-authorised repository/workshop distribution (confirmed 29 September 2026); no general reuse licence",
     "licenseUrl": null,
-    "changes": "Contributor-declared authentic camera photograph with heart-shaped highlights produced optically using a shaped aperture cut-out. The contributor stated that they created the photograph and expressly authorised the selected v2 derivative for this repository. The private Fujifilm original is not bundled; v2 applies the source orientation, resizes without cropping to 2730 × 4096, uses high-quality 4:4:4 JPEG, and strips metadata. Camera metadata and the contributor label are not signed capture provenance."
+    "changes": "Contributor-declared authentic camera photograph with heart-shaped highlights produced optically using a shaped aperture cut-out. The contributor authorised the selected v2 derivative and, on 27 October 2026, an original-resolution source copy at source-media/quiz-10/photo1_metadata_stripped.jpg. That copy removes camera/time/serial-number metadata and retains only the orientation tag; the unmodified original remains private. The v2 detector input still applies the orientation, resizes without cropping to 2730 × 4096, and strips metadata. The contributor label is not signed capture provenance."
   }
 ]
