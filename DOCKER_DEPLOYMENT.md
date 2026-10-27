@@ -52,9 +52,12 @@ SITE_DOMAIN=workshop.example.org
 ```
 
 Leave `APP_BIND_ADDRESS=127.0.0.1`. The container refuses to start if the
-instructor key is not 12–128 characters, the participant passcode is a
+legacy admin-key secret is not 12–128 characters, the participant passcode is a
 weak placeholder (including the development value `a`), open access is enabled,
 or a non-loopback public origin does not use HTTPS.
+The `main` review branch has no admin page or admin actions; the legacy secret
+is retained for compatibility with the existing container startup. The
+`hands-on-session-use` branch still has instructor controls.
 
 To use a chosen event passcode instead of the generated one, replace the single
 line in `secrets/participant_passcode.txt`, retain mode 0644 on the file, and
@@ -145,11 +148,10 @@ through the public HTTPS address:
 
 1. a wrong participant passcode is rejected;
 2. the configured passcode opens the landing page and survives refresh;
-3. the participant code cannot unlock `/admin`;
-4. the instructor key unlocks `/admin`;
-5. the current `main` review site shows its answer-reveal controls but rejects answer submission; the `hands-on-session-use` branch instead saves answers and should be tested for persistence after `docker compose restart app`;
-6. every image and all three videos load, including video seeking/range requests;
-7. the browser reports a valid certificate and `Secure` session cookies.
+3. on `main`, `/admin` is unavailable and admin API actions return 404;
+4. the current `main` review site shows its answer-reveal controls but rejects answer submission; the `hands-on-session-use` branch instead saves answers and should be tested for persistence after `docker compose restart app`;
+5. every image and all three videos load, including video seeking/range requests;
+6. the browser reports a valid certificate and `Secure` session cookies.
 
 Verify the transport for each bundled video, not only visual playback:
 
@@ -169,14 +171,15 @@ bundled MP4s under `public/samples/`. The application also has a
 browser-side compatibility fallback for direct Wrangler access, but the public
 event path should use Caddy's native range delivery.
 
-Read the event code and instructor key only in a private terminal:
+Read the participant passcode only in a private terminal:
 
 ```sh
 cat secrets/participant_passcode.txt
-cat secrets/local_admin_key.txt
 ```
 
-Share only the participant passcode with the audience.
+Share only the participant passcode with the audience. The legacy admin-key
+file is still required by this branch's existing container startup, but it
+does not unlock a route on `main`.
 
 ## 4. Logs, updates and shutdown
 
@@ -241,8 +244,8 @@ moving the bindings to managed/shared services.
 
 ## Important limitations
 
-- The nickname/passcode page is an event-admission barrier, not individual
-  identity authentication.
+- The shared-passcode page is an admission barrier, not individual identity
+  authentication.
 - Files compiled under `public/` can still be fetched directly by someone who
   already knows their URLs. Move media behind authenticated object delivery if
   confidentiality is required.
@@ -252,8 +255,9 @@ moving the bindings to managed/shared services.
   serves the compiled production bundle. Use this deployment only after an
   end-to-end rehearsal; prefer managed D1/R2 for a longer-lived public service.
 - The bundled Caddy configuration does not add application-level rate limiting.
-  For a longer-lived internet service, place a CDN/WAF limit on `/api/join` and
-  `/api/local-login`; allow for many workshop devices sharing one public IP.
+  For a longer-lived internet service, place a CDN/WAF limit on `/api/join`;
+  allow for many devices sharing one public IP. The interactive event branch
+  additionally exposes `/api/local-login`.
 - Before the event, perform a realistic load rehearsal from multiple devices.
   Earlier API concurrency checks did not simulate 50 simultaneous video streams
   or venue Wi-Fi.

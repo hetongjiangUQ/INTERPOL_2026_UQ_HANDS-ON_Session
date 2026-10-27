@@ -5,25 +5,17 @@ import {readFileSync,readdirSync} from 'node:fs';
 import {TRACKER_KEY} from '../lib/tracker-key.server.ts';
 import {buildTrackerKey,startTracker,trackerState,trackerStatus,submitTracker,trackerDashboard,prepareReset,confirmReset,clearTracker,exactMatch} from '../lib/tracker.server.ts';
 import {saveAnswer} from '../lib/save-answer.server.ts';
-import {submissionReady} from '../lib/submission-ready.ts';
 
-test('final-submit gate requires all saved quizzes, active session and no unsaved edits',()=>{
- const ready={started:true,submitted:false,revealed:false,total:10,completed:Array.from({length:10},(_,i)=>String(i))};
- assert(submissionReady(ready,false));
- assert(!submissionReady(null,false));
- assert(!submissionReady(ready,true));
- for(const partial of [{started:false},{submitted:true},{revealed:true},{completed:ready.completed.slice(1)},{completed:Array(10).fill('one')}])assert(!submissionReady({...ready,...partial},false));
- const component=readFileSync(new URL('../components/workshop-tracker.tsx',import.meta.url),'utf8');
- assert.match(component,/disabled=\{!ready\|\|!confirm\|\|busy\}/);
+test('review training does not expose final submission controls',()=>{
  const training=readFileSync(new URL('../components/training.tsx',import.meta.url),'utf8');
  assert.doesNotMatch(training,/<FinalSubmission|saveDraft|Save answer/);
  assert.match(training,/Reveal answer/);
 });
 
 test('final scoreboard does not offer CSV export',()=>{
- const component=readFileSync(new URL('../components/workshop-tracker.tsx',import.meta.url),'utf8');
+ const component=readFileSync(new URL('../components/review-navigation.tsx',import.meta.url),'utf8');
  assert.doesNotMatch(component,/Export CSV|workshop-final-results\.csv|createObjectURL/);
- assert.match(component,/Record any results you need before resetting/);
+ assert.match(component,/Final scoreboard/);
 });
 
 function fixture(){
@@ -107,9 +99,9 @@ test('reset requires two ordered confirmations, expiry and one-use token; preser
  assert.equal((await trackerState(db))!.run_id,null);assert.equal(sql.prepare('SELECT count(*) AS n FROM media').get()!.n,10);assert.equal(sql.prepare('SELECT count(*) AS n FROM exercises').get()!.n,10);assert.equal(sql.prepare('SELECT count(*) AS n FROM workshop_config_versions').get()!.n,1);
  const expired=await prepareReset(db);sql.exec('UPDATE tracker_reset_challenges SET expires_at=0');await assert.rejects(()=>confirmReset(db,expired));sql.close();
 });
-test('tracker routes require authenticated admin and fresh passcode for reset',()=>{
+test('review API has no admin tracker or reset actions',()=>{
  const route=readFileSync(new URL('../app/api/[...path]/route.ts',import.meta.url),'utf8');
- const tracker=route.slice(route.indexOf("if(path[1]==='tracker')"),route.indexOf("if (method === 'GET' && path[1] === 'portrait-lab')"));
- assert.match(tracker,/authenticatedAdmin\(request\)/);assert.match(tracker,/safeEqual\(input.passcode,key\)/);assert.match(tracker,/input.acknowledged!==true/);
+ assert.match(route,/\['admin','local-login','logout'\]\.includes\(path\[0\]\)/);
+ assert.doesNotMatch(route,/startTracker\(|clearTracker\(|confirmReset\(|prepareReset\(|submitTracker\(/);
  assert.match(route,/if \(method !== 'GET'\) sameOrigin\(request\)/);
 });

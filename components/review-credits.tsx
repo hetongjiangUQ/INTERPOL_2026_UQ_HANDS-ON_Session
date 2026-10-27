@@ -16,9 +16,9 @@ function MediaDetails({media}:{media:MediaCredit}){
  </div>;
 }
 
-export function AdminCredits({review=false}:{review?:boolean}={}){
+export function ReviewCredits(){
  const [data,setData]=useState<Credits|null>(null),[error,setError]=useState('');
- useEffect(()=>{let active=true;api<Credits>(review?'review/references':'admin/credits').then(d=>{if(active)setData(d);}).catch(e=>{if(active)setError(e.message);});return()=>{active=false;};},[review]);
+ useEffect(()=>{let active=true;api<Credits>('review/references').then(d=>{if(active)setData(d);}).catch(e=>{if(active)setError(e.message);});return()=>{active=false;};},[]);
  if(error)return <p className="error" role="alert">{error}</p>;
  if(!data)return <p role="status">Loading credits…</p>;
 
@@ -29,7 +29,7 @@ export function AdminCredits({review=false}:{review?:boolean}={}){
  return <section className="panel credits-page">
   <header className="credits-intro">
    <h2>Credits and sources</h2>
-   <p>{review?'These references include source labels and quiz answers.':'Media descriptions include source labels and are for instructor review.'}</p>
+   <p>These references include source labels and quiz answers.</p>
   </header>
 
   <section className="credits-category" aria-labelledby="credits-tools-heading">

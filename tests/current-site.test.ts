@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import {CURRENT_MEDIA_TITLES,CURRENT_QUIZ_MEDIA_CREDITS} from '../lib/acknowledgements.ts';
 import {TRACKER_KEY} from '../lib/tracker-key.server.ts';
@@ -31,7 +31,7 @@ test('credits number the ten current assets in quiz order, separate from referen
     RECOMMENDED_QUIZZES.map(id=>id==='quiz-faceswap-video-v1'?'quiz-faceswap-video-v2':id));
   assert.equal(new Set(CURRENT_QUIZ_MEDIA_CREDITS.map(item=>item.assetTitle)).size,10);
   for(const {assetTitle} of CURRENT_QUIZ_MEDIA_CREDITS)assert.equal(credits.filter(item=>item.title===assetTitle).length,1);
-  const source=readFileSync(new URL('../components/admin-credits.tsx',import.meta.url),'utf8');
+  const source=readFileSync(new URL('../components/review-credits.tsx',import.meta.url),'utf8');
   assert.match(source,/CURRENT_QUIZ_MEDIA_CREDITS\.map/);
   assert.match(source,/Quiz \{index\+1\}/);
   assert.match(source,/Comparison references and watermark input/);
@@ -67,9 +67,10 @@ import {
 } from '../lib/video-seek.ts';
 
 const root = new URL('../', import.meta.url);
-test('final submission provides the supplied PDF as an independent download', () => {
-  const source = readFileSync(new URL('components/workshop-tracker.tsx', root), 'utf8');
-  assert.match(source, /className="secondary tracker-manual-download" href="\/guides\/hands-on-session-instruction-manual\.pdf" download="hands-on session instruction manual\.pdf"/);
+test('review resources provide the supplied PDF as an independent download', () => {
+  const source = readFileSync(new URL('components/review-navigation.tsx', root), 'utf8');
+  assert.match(source, /href="\/guides\/hands-on-session-instruction-manual\.pdf"/);
+  assert.match(source, /download/);
   const pdf = readFileSync(new URL('public/guides/hands-on-session-instruction-manual.pdf', root));
   assert.equal(pdf.subarray(0, 5).toString(), '%PDF-');
   assert.equal(createHash('sha256').update(pdf).digest('hex'), '44e21bd032fc2f3f080b48bd70856b903b6f28f56551df7c8eb7fc6a561953cd');
@@ -455,14 +456,10 @@ test('video seek helpers clamp unsafe values and format finite labels', () => {
 });
 
 
-test('participant entry and key-only instructor access are wired into the distributable site', () => {
+test('participant entry remains while the review site has no admin page', () => {
   const layout = readFileSync(new URL('app/layout.tsx', root), 'utf8');
   const gate = readFileSync(
     new URL('components/participant-access-gate.tsx', root),
-    'utf8',
-  );
-  const admin = readFileSync(
-    new URL('components/admin-panel.tsx', root),
     'utf8',
   );
   const migration = readFileSync(
@@ -474,10 +471,8 @@ test('participant entry and key-only instructor access are wired into the distri
   assert.doesNotMatch(gate, /participant-nickname|Choose a nickname/);
   assert.match(gate, /hetong\.jiang@uq\.edu\.au/);
   assert.match(gate, /Workshop passcode/);
-  assert.match(
-    admin,
-    /<label className="field-label" htmlFor="admin-key">Admin passcode<\/label>/,
-  );
+  assert(!existsSync(new URL('app/admin/page.tsx', root)));
+  assert(!existsSync(new URL('components/admin-panel.tsx', root)));
   assert.match(migration, /participants[\s\S]*nickname/i);
   assert.match(migration, /participants[\s\S]*access_tag/i);
 });

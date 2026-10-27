@@ -3,7 +3,7 @@ import {SignOut} from './sign-out';
 import { usePathname } from 'next/navigation';
 import { useWorkshop } from './workshop-provider';
 import { PARTICIPANT_FEATURES as features } from '@/lib/participant-features';
-export function Header({ instructor = false }: { instructor?: boolean }) {
+export function Header() {
   const { snapshot } = useWorkshop();
   const pathname = usePathname();
   const c = snapshot?.config;
@@ -18,13 +18,8 @@ export function Header({ instructor = false }: { instructor?: boolean }) {
         {features.watermark && c?.watermark.enabled && (
           <a href="/steganography" className="lab-nav-button" aria-current={pathname?.replace(/\/$/, '') === '/steganography' ? 'page' : undefined}>Watermark lab</a>
         )}
-        {instructor && (
-          <a href="/admin" className="instructor-link">
-            Instructor
-          </a>
-        )}
       </nav>}
-      {!instructor && pathname !== '/' && pathname !== '/slides' && <SignOut/>}
+      {pathname !== '/' && pathname !== '/slides' && <SignOut/>}
     </header>
   );
 }

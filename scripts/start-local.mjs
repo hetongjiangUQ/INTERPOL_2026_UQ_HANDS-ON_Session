@@ -26,21 +26,21 @@ async function ready(url,timeoutMs=10000){
     if(!response.ok)return false;
     const session=await response.json();
     if(typeof session.admin!=='boolean'||typeof session.localLogin!=='boolean')return false;
-    const checks=await Promise.all(['/','/admin'].map(path=>fetch(url+path,{signal})));
+    const checks=await Promise.all(['/','/hands-on'].map(path=>fetch(url+path,{signal})));
     await Promise.all(checks.map(r=>r.body?.cancel()));
     return checks.every(r=>r.ok);
   }catch{return false;}
 }
 function show(url,shared=false){
-  console.log('\nWebsite ready: '+url+'/\nInstructor controls: '+url+'/admin');
+  console.log('\nWebsite ready: '+url+'/');
   if(shared){
     const addresses=[...new Set(Object.values(networkInterfaces()).flat().filter(info=>info&&info.family==='IPv4'&&!info.internal&&!info.address.startsWith('169.254.')).map(info=>info.address))];
     for(const address of addresses)console.log('Audience link (same network): http://'+address+':'+new URL(url).port+'/');
     if(!addresses.length)console.log('No network address found. Connect this Mac to the workshop network.');
   }else console.log('This address works only on this Mac.');
   if(!noOpen&&process.platform==='darwin'){
-    const opened=spawnSync('/usr/bin/open',[url+'/admin'],{stdio:'ignore'});
-    if(opened.status!==0)console.log('Open the instructor address above in your browser.');
+    const opened=spawnSync('/usr/bin/open',[url+'/'],{stdio:'ignore'});
+    if(opened.status!==0)console.log('Open the website address above in your browser.');
   }
 }
 function runLocalScript(file,args=[]){

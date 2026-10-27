@@ -37,7 +37,7 @@ if(invokedPath===fileURLToPath(import.meta.url)){
     const configuredDirectory=process.env.EVIDENCE_LAB_SECRETS_DIRECTORY;
     const result=prepareDockerSecrets(configuredDirectory||resolve(root,'secrets'));
     console.log(`Created protected Docker secret files in ${result.destination}.`);
-    console.log('Secret values were not printed. Back up the instructor key securely before deployment.');
+    console.log('Secret values were not printed. Back up the generated files securely before deployment.');
   }catch(error){
     console.error(error instanceof Error?error.message:'Docker secret preparation failed.');
     process.exitCode=1;

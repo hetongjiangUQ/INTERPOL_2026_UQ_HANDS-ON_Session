@@ -66,8 +66,8 @@ test('lab navigation uses browser links rather than failing client router',()=>{
 test('browser reset expires cookies without authentication or server data deletion',()=>{
  const route=readFileSync(new URL('app/api/[...path]/route.ts',root),'utf8');
  const start=route.indexOf("if(method==='POST'&&path[0]==='reset-browser-session')");
- const reset=route.slice(start,route.indexOf("if(method==='POST'&&path[0]==='logout')",start));
- assert(start<route.indexOf("if(path[0]!=='admin')await participantOrInstructor(request)"));
+ const reset=route.slice(start,route.indexOf("if(['admin','local-login','logout'].includes(path[0]))",start));
+ assert(start<route.indexOf('await participant(request)'));
  assert.match(reset,/lab_participant','',0/);assert.match(reset,/lab_admin','',0/);
  assert.doesNotMatch(reset,/DELETE|db\(\)/);
  assert.match(route,/if \(method !== 'GET'\) sameOrigin\(request\)/);
@@ -82,19 +82,22 @@ test('review header offers a one-step sign out without the old reset panel',()=>
  assert.match(signOut,/clearWorkshopDrafts\(localStorage\)/);
  assert.doesNotMatch(signOut,/setConfirm|unsent answers|Reset this browser session/);
 });
-test('admin contains tracker and authenticated credits, without legacy mutation routes',()=>{
- const panel=readFileSync(new URL('components/admin-panel.tsx',root),'utf8');
+test('review site has no admin page or admin mutation endpoints',()=>{
  const route=readFileSync(new URL('app/api/[...path]/route.ts',root),'utf8');
- assert.match(panel,/<WorkshopTracker\/>/);
- assert.match(panel,/instructorAuthenticated/);
- assert.match(panel,/<AdminCredits\/>/);
- assert.match(panel,/TabsTrigger value="credits"/);
- const credits=route.slice(route.indexOf("if(method==='GET'&&path[1]==='credits')"),route.indexOf("if(path[1]==='tracker')"));
- assert.match(credits,/authenticatedAdmin\(request\)/);
- assert.match(credits,/CURRENT_MEDIA_TITLES/);
- for(const name of ['SessionConfig','ManualEditor','PortraitLab','admin/upload','admin/responses'])assert(!panel.includes(name));
- for(const name of ['upload','exercises','workshop','manuals','results','experiments','responses'])assert(!route.includes("path[1]==='"+name+"'"));
- for(const name of ['start','reveal','reset-prepare','reset-confirm','reset'])assert(route.includes("'"+name+"'"));
+ assert(!existsSync(new URL('app/admin/page.tsx',root)));
+ assert(!existsSync(new URL('components/admin-panel.tsx',root)));
+ assert(!existsSync(new URL('components/workshop-tracker.tsx',root)));
+ assert.match(route,/\['admin','local-login','logout'\]\.includes\(path\[0\]\)/);
+ assert.match(route,/path\[0\]==='review'/);
+ assert.match(route,/path\[1\]==='scoreboard'/);
+ assert.match(route,/path\[1\]==='references'/);
+ assert.match(route,/admin:false,instructorAuthenticated:false/);
+ assert.match(route,/await participant\(request\)/);
+ assert.doesNotMatch(route,/authenticatedAdmin\(|participantOrInstructor\(/);
+ assert.doesNotMatch(route,/path\[0\]==='admin'|path\[1\]==='reset-prepare'|path\[1\]==='reset-confirm'|path\[2\]==='start'|path\[2\]==='reveal'/);
+ const gate=readFileSync(new URL('components/participant-access-gate.tsx',root),'utf8');
+ assert.match(gate,/session\.participant \? 'admitted' : 'required'/);
+ assert.doesNotMatch(gate,/session\.instructorAuthenticated/);
 });
 test('only current public media and watermark fixture remain',()=>{
  assert(!existsSync(new URL('public/samples/faceswap/wikimedia-face-swap-video-v1.webm',root)));

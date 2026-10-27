@@ -18,9 +18,6 @@ export const bindings = () =>
 
 export const db = () => bindings().DB;
 
-// Explicit classroom setting; closed unless deliberately enabled for local use.
-export const openWorkshop = () => bindings().WORKSHOP_OPEN_ACCESS === 'true';
-
 export class HttpError extends Error {
   constructor(
     public status: number,
@@ -28,31 +25,6 @@ export class HttpError extends Error {
   ) {
     super(message);
   }
-}
-
-export async function authenticatedAdmin(request?: Request) {
-  const key = bindings().LOCAL_ADMIN_KEY;
-  if (!key || !request) return false;
-  const token = cookie(request, 'lab_admin');
-  if (!token) return false;
-  const [expiry, signature] = token.split('.');
-  if (
-    !expiry ||
-    !signature ||
-    !/^\d+$/.test(expiry) ||
-    Date.now() > Number(expiry)
-  )
-    return false;
-  return await safeEqual(signature, await sign(expiry, key));
-}
-
-export async function isAdmin(request?: Request) {
-  return openWorkshop() || (await authenticatedAdmin(request));
-}
-
-export async function admin(request: Request) {
-  if (!(await isAdmin(request)))
-    throw new HttpError(403, 'Instructor access required.');
 }
 
 export async function safeEqual(a: string, b: string) {
@@ -67,23 +39,6 @@ export async function safeEqual(a: string, b: string) {
   for (let index = 0; index < left.length; index++)
     difference |= left[index] ^ right[index];
   return difference === 0;
-}
-
-export async function sign(value: string, key: string) {
-  const importedKey = await crypto.subtle.importKey(
-    'raw',
-    new TextEncoder().encode(key),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign'],
-  );
-  return hex(
-    await crypto.subtle.sign(
-      'HMAC',
-      importedKey,
-      new TextEncoder().encode(value),
-    ),
-  );
 }
 
 export function hex(value: ArrayBuffer) {
@@ -204,13 +159,6 @@ export async function participant(request: Request) {
   if (!session)
     throw new HttpError(401, 'Enter the website passcode first.');
   return session.id;
-}
-
-export async function participantOrInstructor(request: Request) {
-  if (await participantSession(request)) return;
-  // Do not let the legacy open-workshop setting bypass the server-side gate.
-  if (await authenticatedAdmin(request)) return;
-  throw new HttpError(401, 'Enter the website passcode first.');
 }
 
 export async function exercise(id: string) {

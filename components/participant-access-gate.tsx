@@ -8,7 +8,8 @@ type AccessState = 'checking' | 'required' | 'admitted';
 
 export function ParticipantAccessGate({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const instructorRoute =
+  // Let Next.js display its 404 for the retired route without a passcode form.
+  const retiredAdminRoute =
     pathname === '/admin' ||
     pathname.startsWith('/admin/');
   const [state, setState] = useState<AccessState>('checking');
@@ -17,16 +18,12 @@ export function ParticipantAccessGate({ children }: { children: ReactNode }) {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (instructorRoute) return;
+    if (retiredAdminRoute) return;
     let active = true;
-    api<{ participant: boolean; instructorAuthenticated: boolean }>('session')
+    api<{ participant: boolean }>('session')
       .then((session) => {
         if (active)
-          setState(
-            session.participant || session.instructorAuthenticated
-              ? 'admitted'
-              : 'required',
-          );
+          setState(session.participant ? 'admitted' : 'required');
       })
       .catch((error) => {
         if (!active) return;
@@ -36,9 +33,9 @@ export function ParticipantAccessGate({ children }: { children: ReactNode }) {
     return () => {
       active = false;
     };
-  }, [instructorRoute]);
+  }, [retiredAdminRoute]);
 
-  if (instructorRoute || state === 'admitted') return children;
+  if (retiredAdminRoute || state === 'admitted') return children;
 
   async function enter(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();

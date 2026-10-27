@@ -2,17 +2,16 @@ import {saveAnswer} from '@/lib/save-answer.server';
 import {DETECTORS,CURRENT_MEDIA_TITLES} from '@/lib/acknowledgements';
 import mediaCredits from '@/lib/sample-credits.json';
 import {reviewAnswer,publicScoreboard} from '@/lib/review.server';
-import {buildTrackerKey,startTracker,trackerState,trackerStatus,submitTracker,trackerDashboard,prepareReset,confirmReset,clearTracker} from '@/lib/tracker.server';
+import {trackerState,trackerStatus,trackerDashboard} from '@/lib/tracker.server';
 import {portraitMedia,portraitQuizCase,portraitQuizEvidence} from '@/lib/portrait-lab.server';
 import {ensureExamples,bundledUrl} from '@/lib/examples.server';
 import {ensureQuizBank} from '@/lib/quiz-bank.server';
 import {quizCandidate} from '@/lib/quiz-bank';
 import {readWorkshop} from '@/lib/workshop-config.server';
 import {INSPECTION_REQUIRES_FIRST_ANSWER,participantExercise,practiceConfig,participantDetectorAccess,isSessionDetector} from '@/lib/workshop-config';
-import {validateExperimentPack} from '@/lib/image-experiments';
 import {videoSequenceEvidence} from '@/lib/video-sequence-evidence.server';
 import {parseReconsideredResponse,validateResult} from '@/lib/domain';
-import {bindings,db,admin,isAdmin,authenticatedAdmin,openWorkshop,HttpError,json,body,sameOrigin,participant,participantSession,participantPasscode,participantAccessTag,participantOrInstructor,exercise,publicExercise,setCookie,sign,safeEqual,externalUrl} from '@/lib/server';
+import {bindings,db,HttpError,json,body,sameOrigin,participant,participantSession,participantPasscode,participantAccessTag,exercise,publicExercise,setCookie,safeEqual,externalUrl} from '@/lib/server';
 export const dynamic='force-dynamic';
 const now=()=>new Date().toISOString();
 let prepared:Promise<void>|null=null;
@@ -33,8 +32,8 @@ async function handler(request:Request){
       }
     }
     if(method==='GET'&&path[0]==='session'){
-      const [current,instructor,authenticatedInstructor]=await Promise.all([participantSession(request),isAdmin(request),authenticatedAdmin(request)]);
-      return json({admin:instructor,instructorAuthenticated:authenticatedInstructor,participant:!!current,nickname:current?.nickname??null,openAccess:openWorkshop(),localLogin:!openWorkshop()&&!!bindings().LOCAL_ADMIN_KEY});
+      const current=await participantSession(request);
+      return json({admin:false,instructorAuthenticated:false,participant:!!current,nickname:current?.nickname??null,openAccess:false,localLogin:false});
     }
     if(method==='POST'&&path[0]==='join'){
       const current=await participantSession(request);if(current)return json({ok:true,nickname:current.nickname});
@@ -45,12 +44,6 @@ async function handler(request:Request){
       await db().prepare('INSERT INTO participants(id,nickname,access_tag,created_at) VALUES (?,?,?,?)').bind(id,nickname,accessTag,now()).run();
       return json({ok:true,nickname},200,{'Set-Cookie':setCookie(request,'lab_participant',id,604800)});
     }
-    if(method==='POST'&&path[0]==='local-login'){
-      if(openWorkshop())throw new HttpError(404,'Sign-in is not used for this workshop.');
-      const configured=bindings().LOCAL_ADMIN_KEY;if(!configured)throw new HttpError(404,'Local login is disabled. Use instructor sign-in.');
-      const input=await body(request,2000);if(typeof input.key!=='string'||!await safeEqual(input.key,configured))throw new HttpError(403,'Incorrect instructor key.');
-      const expiry=String(Date.now()+8*3600000);return json({ok:true},200,{'Set-Cookie':setCookie(request,'lab_admin',expiry+'.'+await sign(expiry,configured),28800)});
-    }
     if(method==='POST'&&path[0]==='reset-browser-session'){
       // Works with expired/deleted participant sessions; no database mutation.
       const response=json({ok:true});
@@ -58,8 +51,8 @@ async function handler(request:Request){
       response.headers.append('Set-Cookie',setCookie(request,'lab_admin','',0));
       return response;
     }
-    if(method==='POST'&&path[0]==='logout')return json({ok:true},200,{'Set-Cookie':setCookie(request,'lab_admin','',0)});
-    if(path[0]!=='admin')await participantOrInstructor(request);
+    if(['admin','local-login','logout'].includes(path[0]))throw new HttpError(404,'Endpoint not found.');
+    await participant(request);
     if(method==='GET'&&path[0]==='slides'&&path[1]==='download'&&path.length===2){
       const object=await bindings().FILES.get('workshop-slides/UQ_Deepfake_Slide.pptx');
       if(!object)throw new HttpError(404,'Slides unavailable.');
@@ -89,7 +82,6 @@ async function handler(request:Request){
     if(path[0]==='tracker'){
       const pid=await participant(request);
       if(method==='GET')return json(await trackerStatus(db(),pid));
-      if(method==='POST'&&path[1]==='submit'){const input=await body(request,16000);return json(await submitTracker(db(),pid,input.runId,input.answers,input.workshopRevision));}
       throw new HttpError(404,'Tracker endpoint not found.');
     }
     if(method==='GET'&&path[0]==='workshop'){
@@ -105,11 +97,9 @@ async function handler(request:Request){
     }
     if(method==='GET'&&path[0]==='media'){
       const id=path[1];const record=await db().prepare('SELECT * FROM media WHERE id=?').bind(id).first();if(!record)throw new HttpError(404,'Media not found.');
-      if(!await isAdmin(request)){
-        const config=(await readWorkshop(db())).config;
-        const associated=await db().prepare('SELECT id FROM exercises WHERE media_id=? AND published=1').bind(id).all<{id:string}>();
-        if(!associated.results.some(e=>practiceConfig(config,e.id).enabled))throw new HttpError(404,'Media not found.');
-      }
+      const config=(await readWorkshop(db())).config;
+      const associated=await db().prepare('SELECT id FROM exercises WHERE media_id=? AND published=1').bind(id).all<{id:string}>();
+      if(!associated.results.some(e=>practiceConfig(config,e.id).enabled))throw new HttpError(404,'Media not found.');
       if(String(record.object_key).startsWith('portrait:')){
         const response=await portraitMedia(String(record.object_key).slice('portrait:'.length));
         if(response&&response.headers.get('content-length')===String(record.bytes))return response;
@@ -129,13 +119,11 @@ async function handler(request:Request){
       if(!caseId||!evidence)throw new HttpError(404,'Portrait evidence unavailable.');
       const row=await exercise(exerciseId);
       if(!row.published||String(row.sha256)!==evidence.mediaSha256)throw new HttpError(404,'Portrait evidence unavailable.');
-      if(!await isAdmin(request)){
-        const snapshot=await readWorkshop(db()),view=participantExercise(publicExercise(row),snapshot.config);
-        if(!view||!quizCandidate(exerciseId)?.portrait)throw new HttpError(404,'Portrait evidence unavailable.');
-        if(INSPECTION_REQUIRES_FIRST_ANSWER&&view.practice.mode==='judgement'){
-          const pid=await participant(request);
-          if(!await db().prepare('SELECT initial FROM assessments WHERE participant_id=? AND exercise_id=?').bind(pid,exerciseId).first())throw new HttpError(403,'Save your first judgement to see the portrait evidence.');
-        }
+      const snapshot=await readWorkshop(db()),view=participantExercise(publicExercise(row),snapshot.config);
+      if(!view||!quizCandidate(exerciseId)?.portrait)throw new HttpError(404,'Portrait evidence unavailable.');
+      if(INSPECTION_REQUIRES_FIRST_ANSWER&&view.practice.mode==='judgement'){
+        const pid=await participant(request);
+        if(!await db().prepare('SELECT initial FROM assessments WHERE participant_id=? AND exercise_id=?').bind(pid,exerciseId).first())throw new HttpError(403,'Save your first judgement to see the portrait evidence.');
       }
       if(path.length===2)return json(evidence);
       throw new HttpError(404,'Portrait evidence unavailable.');
@@ -146,13 +134,11 @@ async function handler(request:Request){
       if(!evidence)throw new HttpError(404,'Video-sequence evidence unavailable.');
       const row=await exercise(exerciseId);
       if(String(row.kind)!=='video'||String(row.sha256)!==evidence.mediaSha256)throw new HttpError(404,'Video-sequence evidence unavailable.');
-      if(!await isAdmin(request)){
-        const snapshot=await readWorkshop(db()),view=participantExercise(publicExercise(row),snapshot.config);
-        if(!row.published||!view)throw new HttpError(404,'Video-sequence evidence unavailable.');
-        if(INSPECTION_REQUIRES_FIRST_ANSWER&&view.practice.mode==='judgement'){
-          const pid=await participant(request);
-          if(!await db().prepare('SELECT initial FROM assessments WHERE participant_id=? AND exercise_id=?').bind(pid,exerciseId).first())throw new HttpError(403,'Save your first judgement to see the video-sequence evidence.');
-        }
+      const snapshot=await readWorkshop(db()),view=participantExercise(publicExercise(row),snapshot.config);
+      if(!row.published||!view)throw new HttpError(404,'Video-sequence evidence unavailable.');
+      if(INSPECTION_REQUIRES_FIRST_ANSWER&&view.practice.mode==='judgement'){
+        const pid=await participant(request);
+        if(!await db().prepare('SELECT initial FROM assessments WHERE participant_id=? AND exercise_id=?').bind(pid,exerciseId).first())throw new HttpError(403,'Save your first judgement to see the video-sequence evidence.');
       }
       return json(evidence);
     }
@@ -178,60 +164,16 @@ async function handler(request:Request){
       }
     }
     if(method==='GET'&&path[0]==='result'){
-      if(!isSessionDetector(path[2]))await admin(request);
+      if(!isSessionDetector(path[2]))throw new HttpError(404,'Detector unavailable for this practice.');
       const row=await exercise(path[1]);
-      if(!await isAdmin(request)){
-        const snapshot=await readWorkshop(db());
-        const access=participantDetectorAccess(publicExercise(row),snapshot.config,path[2],false);
-        if(access===404)throw new HttpError(404,'Detector unavailable for this practice.');
-        if(access===403){
-          const pid=await participant(request);
-          if(!await db().prepare('SELECT initial FROM assessments WHERE participant_id=? AND exercise_id=?').bind(pid,path[1]).first())throw new HttpError(403,'Save your first judgement to see the detector result.');
-        }
+      const snapshot=await readWorkshop(db());
+      const access=participantDetectorAccess(publicExercise(row),snapshot.config,path[2],false);
+      if(access===404)throw new HttpError(404,'Detector unavailable for this practice.');
+      if(access===403){
+        const pid=await participant(request);
+        if(!await db().prepare('SELECT initial FROM assessments WHERE participant_id=? AND exercise_id=?').bind(pid,path[1]).first())throw new HttpError(403,'Save your first judgement to see the detector result.');
       }
-      const result=await db().prepare('SELECT result FROM detector_results WHERE exercise_id=? AND model=?').bind(path[1],path[2]).first();let valid=null;if(result){try{valid=path[2]==='experiments'?validateExperimentPack(JSON.parse(String(result.result)),String(row.sha256)):validateResult(JSON.parse(String(result.result)),String(row.sha256));}catch{valid=null;}}if(valid&&path[2]!=='experiments'&&('model' in valid)&&valid.model!==path[2])valid=null;return json({result:valid});
-    }
-    if(path[0]==='admin'){
-      await admin(request);
-      if(method==='GET'&&path[1]==='credits'){
-        if(!await authenticatedAdmin(request))throw new HttpError(403,'Admin passcode sign-in required.');
-        return json({detectors:DETECTORS,media:mediaCredits.filter(item=>CURRENT_MEDIA_TITLES.has(item.title))});
-      }
-      if(path[1]==='tracker') {
-        // Even legacy open-workshop mode cannot bypass tracker authentication.
-        if(!await authenticatedAdmin(request))throw new HttpError(403,'Admin passcode sign-in required.');
-        await prepareExamples();
-        if(method==='GET'){
-          const dashboard=await trackerDashboard(db());
-          if(!dashboard.started){
-            const snapshot=await readWorkshop(db());
-            try{dashboard.questions=(await buildTrackerKey(db(),snapshot.config.practices.filter(p=>p.enabled&&p.mode==='judgement').map(p=>p.id))).map(q=>({...q,correct:0,counts:{}}));}
-            catch(e){return json({...dashboard,keyError:(e as Error).message});}
-          }
-          return json(dashboard);
-        }
-        const input=await body(request,4000);
-        if(path[2]==='start'){
-          const snapshot=await readWorkshop(db());
-          const ids=snapshot.config.practices.filter(p=>p.enabled&&p.mode==='judgement').map(p=>p.id);
-          if(!(await trackerState(db()))?.run_id)await startTracker(db(),await buildTrackerKey(db(),ids),snapshot.revision);
-          return json(await trackerDashboard(db()));
-        }
-        if(path[2]==='reveal'){
-          await db().prepare('UPDATE tracker_state SET revealed=1 WHERE id=1 AND run_id IS NOT NULL').run();
-          return json(await trackerDashboard(db()));
-        }
-        if(['reset-prepare','reset-confirm','reset'].includes(path[2])){
-          const key=bindings().LOCAL_ADMIN_KEY;
-          if(!key||typeof input.passcode!=='string'||!await safeEqual(input.passcode,key))throw new HttpError(403,'Re-enter the correct admin passcode.');
-          if(input.acknowledged!==true)throw new HttpError(400,'Tick the deletion acknowledgement.');
-          if(path[2]==='reset-prepare')return json({token:await prepareReset(db())});
-          if(typeof input.token!=='string')throw new HttpError(400,'Reset confirmation required.');
-          if(path[2]==='reset-confirm'){await confirmReset(db(),input.token);return json({ok:true});}
-          return json({ok:true,cleared:await clearTracker(db(),input.token)});
-        }
-        throw new HttpError(404,'Tracker action not found.');
-      }
+      const result=await db().prepare('SELECT result FROM detector_results WHERE exercise_id=? AND model=?').bind(path[1],path[2]).first();let valid=null;if(result){try{valid=validateResult(JSON.parse(String(result.result)),String(row.sha256));}catch{valid=null;}}if(valid&&('model' in valid)&&valid.model!==path[2])valid=null;return json({result:valid});
     }
     throw new HttpError(404,'Endpoint not found.');
   }catch(e){if(e instanceof HttpError)return json({error:e.message},e.status);if(e instanceof Error&& !/D1|SQLITE|binding|Cannot read/.test(e.message))return json({error:e.message},400);console.error('API request failed',e);return json({error:'The service is unavailable. Please retry or contact the instructor.'},503);}

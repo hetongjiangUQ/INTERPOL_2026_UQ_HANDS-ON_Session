@@ -16,9 +16,9 @@ Requires Node.js 22.13 or newer and `zsh` (the launcher is designed for macOS). 
 ./run.sh
 ```
 
-Open `http://localhost:3001/`; instructor controls are at `/admin`. Keep the terminal open while using the site and press Ctrl+C to stop it. The launcher shares the site on your local network by default; use `./run.sh --local-only` to restrict access to this computer, or `./run.sh --no-open` to prevent it from opening a browser.
+Open `http://localhost:3001/`. Keep the terminal open while using the site and press Ctrl+C to stop it. The launcher shares the site on your local network by default; use `./run.sh --local-only` to restrict access to this computer, or `./run.sh --no-open` to prevent it from opening a browser.
 
-Fresh local setup uses `interpol2026` for both the entry passcode and instructor key. **These are public demonstration defaults, not secure deployment credentials.** Before sharing a server, set separate private values in the ignored `.dev.vars` file (or Docker secret files). Existing local settings are not overwritten by `./install.sh`.
+Fresh local setup uses `interpol2026` for the entry passcode. **This is a public demonstration default, not a secure deployment credential.** Before sharing a server, set a private value in the ignored `.dev.vars` file (or Docker secret file). Existing local settings are not overwritten by `./install.sh`. This review branch has no admin page; its legacy admin-key setting remains only for compatibility with the existing deployment configuration.
 
 For a single-server Docker deployment, see [DOCKER_DEPLOYMENT.md](DOCKER_DEPLOYMENT.md).
 

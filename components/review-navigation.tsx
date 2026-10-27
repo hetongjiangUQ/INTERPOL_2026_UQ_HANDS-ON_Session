@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/client';
-import { AdminCredits } from './admin-credits';
+import { ReviewCredits } from './review-credits';
 type Scores = {
   revealed: boolean;
   submissions: {
@@ -46,7 +46,7 @@ export function ReviewNavigation() {
             Close {panel === 'scoreboard' ? 'scoreboard' : 'references'}
           </button>
         )}
-        {panel === 'references' && <AdminCredits review />}
+        {panel === 'references' && <ReviewCredits />}
         {panel === 'scoreboard' && <Scoreboard />}
       </div>
     </>
