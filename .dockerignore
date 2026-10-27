@@ -24,6 +24,7 @@ TO_REMOVE/
 
 processor/
 research/
+source-media/
 **/__pycache__/
 **/.venv*/
 
