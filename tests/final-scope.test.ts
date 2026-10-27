@@ -101,5 +101,6 @@ test('only current public media and watermark fixture remain',()=>{
  assert.deepEqual(readdirSync(new URL('public/experiments/',root)),['watermark-888-500.png']);
  assert(!existsSync(new URL('app/credits/page.tsx',root)));
  assert(!existsSync(new URL('app/acknowledgements/page.tsx',root)));
- for(const name of ['ACKNOWLEDGEMENTS.md','THIRD_PARTY_MEDIA.md','QUIZ8_MEDIA.md'])assert(existsSync(new URL(name,root)));
+ assert(existsSync(new URL('THIRD_PARTY_MEDIA.md',root)));
+ for(const name of ['ACKNOWLEDGEMENTS.md','QUIZ8_MEDIA.md','components/ui/checkbox.tsx'])assert(!existsSync(new URL(name,root)));
 });

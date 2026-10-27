@@ -144,11 +144,11 @@ The health response should be `{"ok":true}`. Then test all of the following
 through the public HTTPS address:
 
 1. a wrong participant passcode is rejected;
-2. the event passcode admits a nickname and survives refresh;
+2. the configured passcode opens the landing page and survives refresh;
 3. the participant code cannot unlock `/admin`;
 4. the instructor key unlocks `/admin`;
-5. an answer persists after `docker compose restart app`;
-6. every image and video loads, including video seeking/range requests;
+5. the current `main` review site shows its answer-reveal controls but rejects answer submission; the `hands-on-session-use` branch instead saves answers and should be tested for persistence after `docker compose restart app`;
+6. every image and all three videos load, including video seeking/range requests;
 7. the browser reports a valid certificate and `Secure` session cookies.
 
 Verify the transport for each bundled video, not only visual playback:
@@ -164,8 +164,8 @@ wc -c /tmp/video-range.body
 ```
 
 The response must be `206`, cover bytes `0-1023`, report a content length of
-`1024`, and write exactly `1024` bytes. Repeat this check for the second MP4 and
-the face-swap WebM under `public/samples/`. The application also has a
+`1024`, and write exactly `1024` bytes. Repeat this check for the other two
+bundled MP4s under `public/samples/`. The application also has a
 browser-side compatibility fallback for direct Wrangler access, but the public
 event path should use Caddy's native range delivery.
 

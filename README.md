@@ -6,7 +6,7 @@ This is the website-only checkout, but not a pure static-HTML export: instructor
 
 No detector model, checkpoint, Python environment, or live inference service is included. The displayed detector outputs were precomputed for the exact bundled files and are checked against their SHA-256 hashes. They are uncalibrated model outputs, not probabilities or a combined truth score.
 
-The participant entry screen accepts only the shared passcode before displaying the landing page at `/`, the hands-on Detection lab at `/hands-on`, or the slides page at `/slides`. A temporary anonymous visitor label is generated internally to retain the existing session database structure. The current local participant passcode is `interpol2026`. The slides download uses an authenticated endpoint and a private local R2 object seeded at startup from a byte-identical copy of the presenter-supplied `UQ_Deepfake_Slide.pptx` (SHA-256 `c55760d9060fab08dbb4357ad0e67d306a932a4632b28a962ba13b05436d4c2a`). The website also contains a Watermark lab and the audience tracker at `/admin`. Source and methodology records remain in `ACKNOWLEDGEMENTS.md`, `THIRD_PARTY_MEDIA.md` and `QUIZ8_MEDIA.md`; unused media and authoring panels are removed.
+The participant entry screen accepts only the shared passcode before displaying the landing page at `/`, the hands-on Detection lab at `/hands-on`, or the slides page at `/slides`. A temporary anonymous visitor label is generated internally to retain the existing session database structure. The current local participant passcode is `interpol2026`. The slides download uses an authenticated endpoint and a private local R2 object seeded at startup from a byte-identical copy of the presenter-supplied `UQ_Deepfake_Slide.pptx` (SHA-256 `c55760d9060fab08dbb4357ad0e67d306a932a4632b28a962ba13b05436d4c2a`). The website also contains a Watermark lab and the audience tracker at `/admin`. Current asset sources and reuse terms are in [`THIRD_PARTY_MEDIA.md`](THIRD_PARTY_MEDIA.md) and the site's Credits view; unused media and authoring panels are removed.
 
 ## Current development workflow
 
@@ -119,7 +119,7 @@ tabs: **Detector scores** and **Approximate time**.
 
 The watermark playground runs in the browser. It demonstrates simple LSB/DCT payload storage; it is not encryption, ownership proof, signed provenance, or a production watermark.
 
-See **Admin → Credits** in the running site, [`THIRD_PARTY_MEDIA.md`](THIRD_PARTY_MEDIA.md), and [`ACKNOWLEDGEMENTS.md`](ACKNOWLEDGEMENTS.md) for sources, reuse terms, method links, and caveats.
+See the site's **Credits and sources** view and [`THIRD_PARTY_MEDIA.md`](THIRD_PARTY_MEDIA.md) for current sources, reuse terms, method links, and caveats.
 
 ## Source layout
 
@@ -133,4 +133,4 @@ See **Admin → Credits** in the running site, [`THIRD_PARTY_MEDIA.md`](THIRD_PA
 - `scripts/prepare-docker-secrets.mjs`: creates untracked deployment credentials without printing them
 - `DOCKER_DEPLOYMENT.md`: deployment, validation, backup and recovery runbook
 
-The repository intentionally excludes prior workshop databases and responses, model checkpoints, detector environments, research corpora, private contributor source files, superseded local-only media, and generated build/cache directories. The two selected contributor image derivatives are included under explicit repository/workshop authorisation confirmed on 29 September 2026; no general reuse licence is granted. The current Quiz 8 has separate contributor authorisation dated 11 October; the retired Wikimedia clip is not bundled and its CC0 declaration does not apply to the replacement. See [`THIRD_PARTY_MEDIA.md`](THIRD_PARTY_MEDIA.md) for the exact permission, source and hash records.
+The repository intentionally excludes prior workshop databases and responses, model checkpoints, detector environments, research corpora, private contributor source files, superseded local-only media, and generated build/cache directories. The two selected contributor image derivatives are included under explicit repository/workshop authorisation confirmed on 29 September 2026; no general reuse licence is granted. Quiz 8 has separate contributor authorisation dated 11 October. See [`THIRD_PARTY_MEDIA.md`](THIRD_PARTY_MEDIA.md) for the current assets' permission, source and hash records.
