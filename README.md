@@ -6,23 +6,24 @@ This is the website-only checkout, but not a pure static-HTML export: instructor
 
 No detector model, checkpoint, Python environment, or live inference service is included. The displayed detector outputs were precomputed for the exact bundled files and are checked against their SHA-256 hashes. They are uncalibrated model outputs, not probabilities or a combined truth score.
 
-The website contains Detection lab (ten quizzes), Watermark lab and the audience tracker at `/admin`. Source and methodology records remain in `ACKNOWLEDGEMENTS.md`, `THIRD_PARTY_MEDIA.md` and `QUIZ8_MEDIA.md`; unused pages, media and authoring panels are removed.
+The participant entry screen accepts only the shared passcode before displaying the landing page at `/`, the hands-on Detection lab at `/hands-on`, or the slides page at `/slides`. A temporary anonymous visitor label is generated internally to retain the existing session database structure. The current local participant passcode is `interpol2026`. The slides download uses an authenticated endpoint and a private local R2 object seeded at startup from a byte-identical copy of the presenter-supplied `UQ_Deepfake_Slide.pptx` (SHA-256 `c55760d9060fab08dbb4357ad0e67d306a932a4632b28a962ba13b05436d4c2a`). The website also contains a Watermark lab and the audience tracker at `/admin`. Source and methodology records remain in `ACKNOWLEDGEMENTS.md`, `THIRD_PARTY_MEDIA.md` and `QUIZ8_MEDIA.md`; unused media and authoring panels are removed.
 
 ## Current development workflow
 
-This standalone repository preserves the 19 October final copy on `main`. The
-`revealed` branch is an answer-review version: each quiz ends with a **Reveal
-answer / Hide answer** toggle, and the top of the page has **Final scoreboard**,
-**Reference list**, and **Instruction manual** buttons. Inspection tools remain
+This standalone repository preserves the 19 October final copy on
+`hands-on-session-use`. The `main` branch is an answer-review version: each quiz
+ends with a **Reveal answer / Hide answer** toggle, and the top of the page has **Final scoreboard**,
+**Reference list**, and **Instruction manual (pdf)** buttons. Inspection tools remain
 available without answering. Quiz answer submission is disabled in both the
 participant interface and API. Answers require an exact match to the reviewed
 media hash; references contain answer spoilers.
 
 Participant sign-in is retained. The scoreboard displays stored results only
 after an instructor publishes them, and exposes only rank, nickname and score.
-This local source copy includes no event responses. Existing instructor controls
-and CSV export remain available for retained data; the review branch collects no
-new quiz responses. To run a submission-based workshop, use `main`.
+This local source copy includes no event responses. Existing instructor tracker
+controls remain available for retained data, but CSV export is removed; the review
+branch collects no new quiz responses. To run a submission-based workshop, use
+`hands-on-session-use`.
 
 Manual observations, detector outputs, watermarks, provenance, and source labels remain separate evidence; an unusual pattern is not proof of synthesis. No live inference occurs.
 
@@ -51,12 +52,15 @@ passcode in the ignored `.dev.vars` file and restart before a real session. The
 two credentials are deliberately identical in this demonstration copy. Read the local instructor key in a
 private terminal with `sed -n 's/^LOCAL_ADMIN_KEY=//p' .dev.vars`.
 
-This is the final source snapshot of 19 October 2026. No event participant data,
-live deployment secrets, model weights, dependency caches or Git history are
-included. Docker secret preparation also defaults both credentials to
+This repository began as the final source snapshot of 19 October 2026; `main`
+also includes the later review, landing-page and slides changes. No event
+participant data, live deployment secrets, model weights or dependency caches
+are included in source control. This standalone repository has its own local Git history. Docker
+secret preparation also defaults both credentials to
 `interpol2026`. Anyone knowing this shared value can access admin controls,
 including the data-clear confirmation; choose separate private credentials
-before using it for a protected live event. Existing deployments are unchanged.
+before using it for a protected live event. Local generated state is not part
+of the source distribution.
 
 ## Docker server deployment
 
@@ -121,6 +125,7 @@ See **Admin → Credits** in the running site, [`THIRD_PARTY_MEDIA.md`](THIRD_PA
 
 - `app/`, `components/`, `hooks/`, `lib/`: website source and bundled cached evidence
 - `public/`: the selected public media, participant PDF reference, and watermark fixture
+- `slides/`: the presenter-supplied PowerPoint used by the authenticated slides download
 - `drizzle/`, `db/`: local D1 schema and migrations
 - `install.sh`: installs the locked JavaScript dependencies and prepares a blank local database
 - `run.sh`: applies migrations and starts the local site

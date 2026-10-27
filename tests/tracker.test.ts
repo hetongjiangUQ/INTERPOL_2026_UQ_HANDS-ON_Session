@@ -20,6 +20,12 @@ test('final-submit gate requires all saved quizzes, active session and no unsave
  assert.match(training,/Reveal answer/);
 });
 
+test('final scoreboard does not offer CSV export',()=>{
+ const component=readFileSync(new URL('../components/workshop-tracker.tsx',import.meta.url),'utf8');
+ assert.doesNotMatch(component,/Export CSV|workshop-final-results\.csv|createObjectURL/);
+ assert.match(component,/Record any results you need before resetting/);
+});
+
 function fixture(){
  const sql=new DatabaseSync(':memory:');
  sql.exec('PRAGMA foreign_keys=ON');

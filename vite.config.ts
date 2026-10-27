@@ -38,7 +38,10 @@ export default defineConfig(async () => {
 
   return {
     css: { postcss: { plugins: [tailwindcss()] } },
-    server: { watch: { ignored: ['**/processor/**','**/.package-store/**','**/TO_REMOVE/**'], ...(isCodexSeatbeltSandbox ? {useFsEvents:false,usePolling:true}:{}) } },
+    server: {
+      fs: {deny: ['.env', '.env.*', '.dev.vars*', 'deploy.env', '*.{crt,pem}', '**/.git/**', '**/secrets/**', '**/UQ_Deepfake_Slide.pptx']},
+      watch: { ignored: ['**/processor/**','**/.package-store/**','**/TO_REMOVE/**'], ...(isCodexSeatbeltSandbox ? {useFsEvents:false,usePolling:true}:{}) },
+    },
     plugins: [
       vinext(),
       cloudflare({

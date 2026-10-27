@@ -2,9 +2,15 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
-import {CURRENT_MEDIA_TITLES} from '../lib/acknowledgements.ts';
+import {CURRENT_MEDIA_TITLES,CURRENT_QUIZ_MEDIA_CREDITS} from '../lib/acknowledgements.ts';
 import {TRACKER_KEY} from '../lib/tracker-key.server.ts';
 import {CLASSIFICATION_GUIDANCE} from '../lib/domain.ts';
+
+test('landing page links to the supplied website source repository',()=>{
+  const source=readFileSync(new URL('../app/page.tsx',import.meta.url),'utf8');
+  assert.match(source,/https:\/\/github\.com\/hetongjiangUQ\/INTERPOL_2026_UQ_HANDS-ON_Session/);
+  assert.match(source,/rel="noopener noreferrer"/);
+});
 
 test('final credits include both authentic references and only the current video',()=>{
   const credits=JSON.parse(readFileSync(new URL('../lib/sample-credits.json',import.meta.url),'utf8'));
@@ -18,14 +24,28 @@ test('final credits include both authentic references and only the current video
   assert(!visible.some((c:{title:string})=>c.title.includes('Wikimedia face-swap')));
 });
 
+test('credits number the ten current assets in quiz order, separate from references',()=>{
+  const credits=JSON.parse(readFileSync(new URL('../lib/sample-credits.json',import.meta.url),'utf8')) as {title:string}[];
+  assert.equal(CURRENT_QUIZ_MEDIA_CREDITS.length,10);
+  assert.deepEqual(CURRENT_QUIZ_MEDIA_CREDITS.map(item=>item.quizId),
+    RECOMMENDED_QUIZZES.map(id=>id==='quiz-faceswap-video-v1'?'quiz-faceswap-video-v2':id));
+  assert.equal(new Set(CURRENT_QUIZ_MEDIA_CREDITS.map(item=>item.assetTitle)).size,10);
+  for(const {assetTitle} of CURRENT_QUIZ_MEDIA_CREDITS)assert.equal(credits.filter(item=>item.title===assetTitle).length,1);
+  const source=readFileSync(new URL('../components/admin-credits.tsx',import.meta.url),'utf8');
+  assert.match(source,/CURRENT_QUIZ_MEDIA_CREDITS\.map/);
+  assert.match(source,/Quiz \{index\+1\}/);
+  assert.match(source,/Comparison references and watermark input/);
+  assert.match(source,/<h3 id="credits-branding-heading">Branding<\/h3>/);
+  assert.doesNotMatch(source,/Use and interpretation|CLASSIFICATION_GUIDANCE|data\.policy|data\.evidence/);
+});
+
 test('camera-origin answers disclose processing and participant definitions',()=>{
   assert.match(TRACKER_KEY['quiz-user-image-b-v2'].basis,/2730 × 4096/);
   assert.match(TRACKER_KEY['quiz-user-image-b-v2'].basis,/re-encodes/);
   assert.match(TRACKER_KEY['quiz-image-five'].basis,/Snapseed 2.0/);
   assert.match(TRACKER_KEY['quiz-image-five'].basis,/editing steps are unknown/);
   assert.match(CLASSIFICATION_GUIDANCE,/not necessarily an untouched file/);
-  for(const file of ['training.tsx','admin-credits.tsx'])
-    assert.match(readFileSync(new URL('../components/'+file,import.meta.url),'utf8'),/\{CLASSIFICATION_GUIDANCE\}/);
+  assert.match(readFileSync(new URL('../components/training.tsx',import.meta.url),'utf8'),/\{CLASSIFICATION_GUIDANCE\}/);
 });
 import { QUIZ_BANK, RECOMMENDED_QUIZZES } from '../lib/quiz-bank.ts';
 import {
@@ -450,7 +470,9 @@ test('participant entry and key-only instructor access are wired into the distri
     'utf8',
   );
   assert.match(layout, /ParticipantAccessGate/);
-  assert.match(gate, /post\('join', \{ nickname, passcode \}\)/);
+  assert.match(gate, /post\('join', \{ passcode \}\)/);
+  assert.doesNotMatch(gate, /participant-nickname|Choose a nickname/);
+  assert.match(gate, /hetong\.jiang@uq\.edu\.au/);
   assert.match(gate, /Workshop passcode/);
   assert.match(
     admin,

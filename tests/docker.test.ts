@@ -155,7 +155,7 @@ test('runtime env file is fail-closed and secrets do not enter Wrangler argument
     /--(?:var|define)'[^\n]*(?:adminKey|participantPasscode)/,
   );
   const persistUses = entrypoint.match(/'--persist-to',persistPath/g) ?? [];
-  assert.equal(persistUses.length, 2);
+  assert.equal(persistUses.length, 3);
 });
 
 test('optional IP origin is HTTPS-only and the edge overwrites the origin header', () => {

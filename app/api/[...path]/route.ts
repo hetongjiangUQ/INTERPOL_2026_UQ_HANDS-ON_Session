@@ -1,5 +1,5 @@
 import {saveAnswer} from '@/lib/save-answer.server';
-import {DETECTORS,WEIGHT_POLICY,EVIDENCE_SEPARATION,CURRENT_MEDIA_TITLES} from '@/lib/acknowledgements';
+import {DETECTORS,CURRENT_MEDIA_TITLES} from '@/lib/acknowledgements';
 import mediaCredits from '@/lib/sample-credits.json';
 import {reviewAnswer,publicScoreboard} from '@/lib/review.server';
 import {buildTrackerKey,startTracker,trackerState,trackerStatus,submitTracker,trackerDashboard,prepareReset,confirmReset,clearTracker} from '@/lib/tracker.server';
@@ -12,7 +12,6 @@ import {INSPECTION_REQUIRES_FIRST_ANSWER,participantExercise,practiceConfig,part
 import {validateExperimentPack} from '@/lib/image-experiments';
 import {videoSequenceEvidence} from '@/lib/video-sequence-evidence.server';
 import {parseReconsideredResponse,validateResult} from '@/lib/domain';
-import {normaliseParticipantNickname} from '@/lib/participant-access';
 import {bindings,db,admin,isAdmin,authenticatedAdmin,openWorkshop,HttpError,json,body,sameOrigin,participant,participantSession,participantPasscode,participantAccessTag,participantOrInstructor,exercise,publicExercise,setCookie,sign,safeEqual,externalUrl} from '@/lib/server';
 export const dynamic='force-dynamic';
 const now=()=>new Date().toISOString();
@@ -39,11 +38,10 @@ async function handler(request:Request){
     }
     if(method==='POST'&&path[0]==='join'){
       const current=await participantSession(request);if(current)return json({ok:true,nickname:current.nickname});
-      const raw=await body(request,2000);if(!raw||typeof raw!=='object'||Array.isArray(raw))throw new HttpError(400,'Nickname and passcode are required.');
-      const input=raw as Record<string,unknown>;let nickname:string;
-      try{nickname=normaliseParticipantNickname(input.nickname);}catch(error){throw new HttpError(400,error instanceof Error?error.message:'Enter a nickname.');}
+      const raw=await body(request,2000);if(!raw||typeof raw!=='object'||Array.isArray(raw))throw new HttpError(400,'Passcode is required.');
+      const input=raw as Record<string,unknown>;
       if(typeof input.passcode!=='string'||!await safeEqual(input.passcode,participantPasscode()))throw new HttpError(403,'Incorrect workshop passcode.');
-      const id=crypto.randomUUID(),accessTag=await participantAccessTag();
+      const id=crypto.randomUUID(),nickname=`Visitor ${id.slice(0,8)}`,accessTag=await participantAccessTag();
       await db().prepare('INSERT INTO participants(id,nickname,access_tag,created_at) VALUES (?,?,?,?)').bind(id,nickname,accessTag,now()).run();
       return json({ok:true,nickname},200,{'Set-Cookie':setCookie(request,'lab_participant',id,604800)});
     }
@@ -62,10 +60,21 @@ async function handler(request:Request){
     }
     if(method==='POST'&&path[0]==='logout')return json({ok:true},200,{'Set-Cookie':setCookie(request,'lab_admin','',0)});
     if(path[0]!=='admin')await participantOrInstructor(request);
+    if(method==='GET'&&path[0]==='slides'&&path[1]==='download'&&path.length===2){
+      const object=await bindings().FILES.get('workshop-slides/UQ_Deepfake_Slide.pptx');
+      if(!object)throw new HttpError(404,'Slides unavailable.');
+      return new Response(object.body,{headers:{
+        'Content-Type':'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'Content-Disposition':'attachment; filename="UQ_Deepfake_Slide.pptx"',
+        'Content-Length':String(object.size),
+        'Cache-Control':'private, no-store',
+        'X-Content-Type-Options':'nosniff',
+      }});
+    }
     if(method==='POST'&&(path[0]==='assessment'||(path[0]==='tracker'&&path[1]==='submit')))
       throw new HttpError(403,'This review website does not accept quiz submissions.');
     if(method==='GET'&&path[0]==='review'){
-      if(path[1]==='references')return json({detectors:DETECTORS,policy:WEIGHT_POLICY,evidence:EVIDENCE_SEPARATION,media:mediaCredits.filter(item=>CURRENT_MEDIA_TITLES.has(item.title))});
+      if(path[1]==='references')return json({detectors:DETECTORS,media:mediaCredits.filter(item=>CURRENT_MEDIA_TITLES.has(item.title))});
       if(path[1]==='scoreboard')return json(publicScoreboard(await trackerDashboard(db())));
       if(path[1]==='answer'){
         const row=await exercise(path[2]);
@@ -186,7 +195,7 @@ async function handler(request:Request){
       await admin(request);
       if(method==='GET'&&path[1]==='credits'){
         if(!await authenticatedAdmin(request))throw new HttpError(403,'Admin passcode sign-in required.');
-        return json({detectors:DETECTORS,policy:WEIGHT_POLICY,evidence:EVIDENCE_SEPARATION,media:mediaCredits.filter(item=>CURRENT_MEDIA_TITLES.has(item.title))});
+        return json({detectors:DETECTORS,media:mediaCredits.filter(item=>CURRENT_MEDIA_TITLES.has(item.title))});
       }
       if(path[1]==='tracker') {
         // Even legacy open-workshop mode cannot bypass tracker authentication.

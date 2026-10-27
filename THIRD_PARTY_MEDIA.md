@@ -30,6 +30,11 @@ The retired Wikimedia Face Swap video and old Mountain watermark image are
 no longer bundled. The current presenter-supplied instruction manual is included
 at `public/guides/hands-on-session-instruction-manual.pdf` and linked beside
 final submission; it was added on 15 October and is distinct from the retired guide.
+The presenter-supplied `slides/UQ_Deepfake_Slide.pptx` is bundled for the
+authenticated slides download (SHA-256
+`c55760d9060fab08dbb4357ad0e67d306a932a4632b28a962ba13b05436d4c2a`).
+Its inclusion does not grant a general reuse licence for the presentation or
+its embedded material.
 Historical source descriptions
 below remain records, not the current asset list. Current Quiz 8 is documented
 in `QUIZ8_MEDIA.md`; the watermark input is `watermark-888-500.png`. Other

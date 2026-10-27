@@ -66,6 +66,12 @@ async function start(){
   }
   // Initialise missing local settings without replacing an existing configuration.
   if(!existsSync('.dev.vars')||!existsSync('wrangler.local.jsonc'))runLocalScript('scripts/setup-local.mjs');
+  console.log('Preparing the presentation download…');
+  runLocalScript('node_modules/wrangler/bin/wrangler.js',[
+    'r2','object','put','evidence-lab-files/workshop-slides/UQ_Deepfake_Slide.pptx',
+    '--file','slides/UQ_Deepfake_Slide.pptx','--local','--config','wrangler.local.jsonc',
+    '--content-type','application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  ]);
   console.log('Preparing the local database…');
   runLocalScript('node_modules/wrangler/bin/wrangler.js',['d1','migrations','apply','DB','--local','--config','wrangler.local.jsonc']);
   console.log('\nStarting Evidence Lab. Keep this terminal open; press Ctrl+C to stop.');

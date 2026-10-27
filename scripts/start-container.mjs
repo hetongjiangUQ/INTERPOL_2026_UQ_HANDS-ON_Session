@@ -125,6 +125,18 @@ function runMigrations(environment){
   if(result.status!==0)throw new Error(`Database migration failed with exit code ${result.status??'unknown'}.`);
 }
 
+function seedSlides(environment){
+  console.log('Preparing the presentation download…');
+  const result=spawnSync('wrangler',[
+    'r2','object','put','evidence-lab-files/workshop-slides/UQ_Deepfake_Slide.pptx',
+    '--file','slides/UQ_Deepfake_Slide.pptx',
+    '--content-type','application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    '--local','--config','wrangler.docker.jsonc','--persist-to',persistPath,
+  ],{cwd:root,env:environment,stdio:'inherit'});
+  if(result.error)throw result.error;
+  if(result.status!==0)throw new Error(`Presentation setup failed with exit code ${result.status??'unknown'}.`);
+}
+
 async function serve(environment){
   console.log('Starting Evidence Lab on container port 3001…');
   const child=spawn('wrangler',[
@@ -176,6 +188,7 @@ async function main(){
   delete childEnvironment.WORKSHOP_PARTICIPANT_PASSCODE;
 
   try{
+    seedSlides(childEnvironment);
     runMigrations(childEnvironment);
     process.exitCode=await serve(childEnvironment);
   }finally{

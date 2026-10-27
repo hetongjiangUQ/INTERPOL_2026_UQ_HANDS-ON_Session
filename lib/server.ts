@@ -202,7 +202,7 @@ export async function participantSession(
 export async function participant(request: Request) {
   const session = await participantSession(request);
   if (!session)
-    throw new HttpError(401, 'Enter the workshop nickname and passcode first.');
+    throw new HttpError(401, 'Enter the website passcode first.');
   return session.id;
 }
 
@@ -210,7 +210,7 @@ export async function participantOrInstructor(request: Request) {
   if (await participantSession(request)) return;
   // Do not let the legacy open-workshop setting bypass the server-side gate.
   if (await authenticatedAdmin(request)) return;
-  throw new HttpError(401, 'Enter the workshop nickname and passcode first.');
+  throw new HttpError(401, 'Enter the website passcode first.');
 }
 
 export async function exercise(id: string) {

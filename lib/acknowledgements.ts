@@ -7,19 +7,6 @@ export type DetectorAcknowledgement={
   scoreMeaning:string;
 };
 
-export const WEIGHT_POLICY={
-  heading:'No model weights or checkpoints are included',
-  summary:'This website serves cached scalar outputs bound to exact media SHA-256 values. Detector repositories, weights, checkpoints, Python environments and GPU runtimes are deliberately excluded.',
-  warning:'A link or acknowledgement is not permission to redistribute or use an asset. Code licences, checkpoint terms, dataset terms and depicted-person consent are separate questions.',
-} as const;
-
-export const EVIDENCE_SEPARATION=[
-  'Manual inspection aids expose pixels, frames or file processing; they do not establish authenticity.',
-  'Cached detector outputs are model-specific measurements on exact bytes; they are not votes or a shared probability scale.',
-  'Documented source labels provide controlled ground truth for discussion but are not automatically signed provenance.',
-  'A watermark or signed provenance record answers a different question from passive forensic detection. Missing provenance never proves authenticity.',
-] as const;
-
 export const DETECTORS:readonly DetectorAcknowledgement[]=[
   {name:'UniversalFakeDetect',publication:'CVPR 2023',paper:'https://openaccess.thecvf.com/content/CVPR2023/html/Ojha_Towards_Universal_Fake_Image_Detectors_That_Generalize_Across_Generative_Models_CVPR_2023_paper.html',repository:'https://github.com/WisconsinAIVision/UniversalFakeDetect',scope:'Whole-image synthetic-image classifier; video use here scores sampled frames independently.',scoreMeaning:'Raw 0–1 output: higher leans synthetic under this model. It is not a calibrated probability.'},
   {name:'Community Forensics',publication:'CVPR 2025',paper:'https://openaccess.thecvf.com/content/CVPR2025/html/Park_Community_Forensics_Using_Thousands_of_Generators_to_Train_Fake_Image_CVPR_2025_paper.html',repository:'https://github.com/JeongsooP/Community-Forensics',scope:'Whole-image classifier trained across many generators; video use here remains framewise.',scoreMeaning:'Raw 0–1 output: higher leans synthetic under this model. It is not a calibrated probability.'},
@@ -31,17 +18,22 @@ export const DETECTORS:readonly DetectorAcknowledgement[]=[
   {name:'PwTF-DVD',publication:'ICCV 2025',paper:'https://openaccess.thecvf.com/content/ICCV2025/html/Kim_Beyond_Spatial_Frequency_Pixel-wise_Temporal_Frequency-based_Deepfake_Video_Detection_ICCV_2025_paper.html',repository:'https://github.com/rama0126/PwTF-DVD',scope:'Temporal face-forgery detector operating on tracked face clips.',scoreMeaning:'Mean sigmoid-transformed fake-class output across clips. Higher is more face-forgery-like, but it is not a calibrated probability.'},
 ] as const;
 
+/** The order is the visible Quiz 1–10 order, not the source-manifest order. */
+export const CURRENT_QUIZ_MEDIA_CREDITS=[
+  {quizId:'quiz-first-look',assetTitle:'Late Afternoon Cloudy Valley (SD3.5).webp'},
+  {quizId:'quiz-video-authentic-hard',assetTitle:'AIGVDBench — difficult authentic studio clip (video evidence A)'},
+  {quizId:'quiz-video-synthetic-hard',assetTitle:'AIGVDBench — Sora-generated reading clip (video evidence B)'},
+  {quizId:'quiz-image-five',assetTitle:'Mountain (209011307).jpeg'},
+  {quizId:'quiz-portrait-d',assetTitle:'Face Research Lab London Set — portrait stress case D'},
+  {quizId:'quiz-portrait-e',assetTitle:'SFHQ-T2I — portrait stress case E'},
+  {quizId:'quiz-faceswap-still-v3',assetTitle:'Identity evidence A — controlled still-photo face swap'},
+  {quizId:'quiz-faceswap-video-v2',assetTitle:'Quiz 8 — contributor-authorised portrait video (v2)'},
+  {quizId:'quiz-user-image-a-v1',assetTitle:'Image evidence C — user-supplied manipulated portrait'},
+  {quizId:'quiz-user-image-b-v2',assetTitle:'Image evidence D — user-supplied camera photograph'},
+] as const;
+
 export const CURRENT_MEDIA_TITLES=new Set([
-  'Late Afternoon Cloudy Valley (SD3.5).webp',
-  'Mountain (209011307).jpeg',
-  'AIGVDBench — difficult authentic studio clip (video evidence A)',
-  'AIGVDBench — Sora-generated reading clip (video evidence B)',
-  'Face Research Lab London Set — portrait stress case D',
-  'SFHQ-T2I — portrait stress case E',
-  'Identity evidence A — controlled still-photo face swap',
-  'Quiz 8 — contributor-authorised portrait video (v2)',
+  ...CURRENT_QUIZ_MEDIA_CREDITS.map(item=>item.assetTitle),
   'Watermark lab — yo-yo photograph',
   'Authentic comparison reference — presenter portrait',
-  'Image evidence C — user-supplied manipulated portrait',
-  'Image evidence D — user-supplied camera photograph',
 ]);

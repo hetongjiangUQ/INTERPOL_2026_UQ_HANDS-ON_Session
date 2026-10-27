@@ -37,7 +37,7 @@ export function ReviewNavigation() {
           href="/guides/hands-on-session-instruction-manual.pdf"
           download
         >
-          Instruction manual ↓
+          Instruction manual (pdf)
         </a>
       </nav>
       <div id="review-resources">

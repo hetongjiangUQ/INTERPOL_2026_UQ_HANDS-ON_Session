@@ -3,7 +3,6 @@
 import { type ReactNode, type SyntheticEvent, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { api, post } from '@/lib/client';
-import {ResetBrowserSession} from './reset-browser-session';
 
 type AccessState = 'checking' | 'required' | 'admitted';
 
@@ -13,7 +12,6 @@ export function ParticipantAccessGate({ children }: { children: ReactNode }) {
     pathname === '/admin' ||
     pathname.startsWith('/admin/');
   const [state, setState] = useState<AccessState>('checking');
-  const [nickname, setNickname] = useState('');
   const [passcode, setPasscode] = useState('');
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
@@ -47,7 +45,7 @@ export function ParticipantAccessGate({ children }: { children: ReactNode }) {
     setBusy(true);
     setMessage('');
     try {
-      await post('join', { nickname, passcode });
+      await post('join', { passcode });
       setPasscode('');
       setState('admitted');
     } catch (error) {
@@ -61,32 +59,12 @@ export function ParticipantAccessGate({ children }: { children: ReactNode }) {
   return (
     <main className="entry-page">
       <section className="panel narrow entry-panel" aria-labelledby="entry-title">
-        <p className="eyebrow">HANDS-ON · DEEPFAKE DETECTION</p>
-        <h1 id="entry-title">Enter the workshop</h1>
+        <h1 id="entry-title">Enter the website</h1>
         {state === 'checking' ? (
           <output>Checking your workshop access…</output>
         ) : (
           <form onSubmit={enter}>
-            <p>
-              Choose a nickname, then enter the shared passcode provided by the
-              presenter.
-            </p>
-            <label className="field-label" htmlFor="participant-nickname">
-              Nickname
-            </label>
-            <input
-              id="participant-nickname"
-              name="nickname"
-              value={nickname}
-              onChange={(event) => setNickname(event.target.value)}
-              autoComplete="off"
-              maxLength={80}
-              required
-            />
-            <p className="small muted entry-help">
-              Use an informal name rather than your full real name. It identifies
-              this browser session; this review version collects no quiz answers.
-            </p>
+            <p>Enter the shared passcode to open the website.</p>
             <label className="field-label" htmlFor="participant-passcode">
               Workshop passcode
             </label>
@@ -110,14 +88,16 @@ export function ParticipantAccessGate({ children }: { children: ReactNode }) {
             <button
               className="primary full entry-submit"
               type="submit"
-              disabled={busy || !nickname.trim() || !passcode}
+              disabled={busy || !passcode}
             >
-              {busy ? 'Checking…' : 'Enter workshop'}
+              {busy ? 'Checking…' : 'Enter website'}
             </button>
           </form>
         )}
+        <p className="small muted entry-contact">
+          Contact: <a href="mailto:hetong.jiang@uq.edu.au">hetong.jiang@uq.edu.au</a>
+        </p>
       </section>
-      <ResetBrowserSession/>
     </main>
   );
 }

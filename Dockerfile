@@ -42,6 +42,7 @@ WORKDIR /app
 # The runtime receives only the compiled site, schema migrations, deployment
 # configuration and entrypoint. Source, local state and model files stay out.
 COPY --from=builder --chown=evidence-lab:evidence-lab /build/dist ./dist
+COPY --chown=evidence-lab:evidence-lab slides ./slides
 COPY --chown=evidence-lab:evidence-lab drizzle ./drizzle
 COPY --chown=evidence-lab:evidence-lab wrangler.docker.jsonc ./wrangler.docker.jsonc
 COPY --chown=evidence-lab:evidence-lab scripts/start-container.mjs ./scripts/start-container.mjs

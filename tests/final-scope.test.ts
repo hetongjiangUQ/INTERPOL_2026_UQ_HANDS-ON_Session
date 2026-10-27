@@ -61,7 +61,7 @@ test('lab navigation uses browser links rather than failing client router',()=>{
  const header=readFileSync(new URL('components/header.tsx',root),'utf8');
  assert.doesNotMatch(header,/next\/link|<Link/);
  assert.match(header,/<a href="\/steganography"/);
- assert.match(header,/<a href="\/" className="lab-nav-button"/);
+ assert.match(header,/<a href="\/hands-on" className="lab-nav-button"/);
 });
 test('browser reset expires cookies without authentication or server data deletion',()=>{
  const route=readFileSync(new URL('app/api/[...path]/route.ts',root),'utf8');
@@ -71,6 +71,16 @@ test('browser reset expires cookies without authentication or server data deleti
  assert.match(reset,/lab_participant','',0/);assert.match(reset,/lab_admin','',0/);
  assert.doesNotMatch(reset,/DELETE|db\(\)/);
  assert.match(route,/if \(method !== 'GET'\) sameOrigin\(request\)/);
+});
+test('review header offers a one-step sign out without the old reset panel',()=>{
+ const header=readFileSync(new URL('components/header.tsx',root),'utf8');
+ const signOut=readFileSync(new URL('components/sign-out.tsx',root),'utf8');
+ assert.match(header,/<SignOut\/>/);
+ assert.doesNotMatch(header,/ResetBrowserSession/);
+ assert.match(signOut, /'Sign out'/);
+ assert.match(signOut,/post\('reset-browser-session',\{\}\)/);
+ assert.match(signOut,/clearWorkshopDrafts\(localStorage\)/);
+ assert.doesNotMatch(signOut,/setConfirm|unsent answers|Reset this browser session/);
 });
 test('admin contains tracker and authenticated credits, without legacy mutation routes',()=>{
  const panel=readFileSync(new URL('components/admin-panel.tsx',root),'utf8');
