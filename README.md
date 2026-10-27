@@ -6,11 +6,11 @@ This is the website-only checkout, but not a pure static-HTML export: instructor
 
 No detector model, checkpoint, Python environment, or live inference service is included. The displayed detector outputs were precomputed for the exact bundled files and are checked against their SHA-256 hashes. They are uncalibrated model outputs, not probabilities or a combined truth score.
 
-The website contains Detection lab (ten quizzes), Watermark lab and the audience tracker at `/admin`. Source and methodology records remain in `ACKNOWLEDGEMENTS.md`, `THIRD_PARTY_MEDIA.md` and `QUIZ8_MEDIA.md`; unused pages, media and authoring panels are removed.
+The website contains Detection lab (ten quizzes), Watermark lab and the audience tracker at `/admin`. Current asset sources and reuse terms are in [`THIRD_PARTY_MEDIA.md`](THIRD_PARTY_MEDIA.md) and the site's Admin → Credits tab; unused pages, media and authoring panels are removed.
 
 ## Current development workflow
 
-Develop directly in this repository. `before_remove_backend_extra` preserves the complete pre-cleanup version; `main` contains the simplified delivery. The previous `website/deepfake/training-site/` folder is historical reference only.
+This `hands-on-session-use` branch preserves the interactive answer-submission version used for the workshop. `main` contains the later answer-review website with a landing page and slides download.
 
 Admin flow: sign in, review the answer key, then **Start tracker**. Participants save all ten answers and confirm their final submission. Ranking uses exact classification correctness, then earliest final submission. **Reveal results & close submissions** releases scores. CSV export is available. Clearing participant data requires the admin passcode, acknowledgement checkbox and two confirmations; it does not clear media/evidence. Export first.
 
@@ -41,12 +41,13 @@ passcode in the ignored `.dev.vars` file and restart before a real session. The
 two credentials are deliberately identical in this demonstration copy. Read the local instructor key in a
 private terminal with `sed -n 's/^LOCAL_ADMIN_KEY=//p' .dev.vars`.
 
-This is the final source snapshot of 19 October 2026. No event participant data,
-live deployment secrets, model weights, dependency caches or Git history are
-included. Docker secret preparation also defaults both credentials to
+This branch originated from the final source snapshot of 19 October 2026. No
+event participant data, live deployment secrets, model weights or dependency
+caches are included in source control. Docker secret preparation also defaults both credentials to
 `interpol2026`. Anyone knowing this shared value can access admin controls,
 including the data-clear confirmation; choose separate private credentials
-before using it for a protected live event. Existing deployments are unchanged.
+before using it for a protected live event. Local generated state is not part
+of the source distribution.
 
 ## Docker server deployment
 
@@ -105,7 +106,7 @@ tabs: **Detector scores** and **Approximate time**.
 
 The watermark playground runs in the browser. It demonstrates simple LSB/DCT payload storage; it is not encryption, ownership proof, signed provenance, or a production watermark.
 
-See **Admin → Credits** in the running site, [`THIRD_PARTY_MEDIA.md`](THIRD_PARTY_MEDIA.md), and [`ACKNOWLEDGEMENTS.md`](ACKNOWLEDGEMENTS.md) for sources, reuse terms, method links, and caveats.
+See **Admin → Credits** in the running site and [`THIRD_PARTY_MEDIA.md`](THIRD_PARTY_MEDIA.md) for current sources, reuse terms, method links, and caveats.
 
 ## Source layout
 
@@ -118,4 +119,4 @@ See **Admin → Credits** in the running site, [`THIRD_PARTY_MEDIA.md`](THIRD_PA
 - `scripts/prepare-docker-secrets.mjs`: creates untracked deployment credentials without printing them
 - `DOCKER_DEPLOYMENT.md`: deployment, validation, backup and recovery runbook
 
-The repository intentionally excludes prior workshop databases and responses, model checkpoints, detector environments, research corpora, private contributor source files, superseded local-only media, and generated build/cache directories. The two selected contributor image derivatives are included under explicit repository/workshop authorisation confirmed on 29 September 2026; no general reuse licence is granted. The current Quiz 8 has separate contributor authorisation dated 11 October; the retired Wikimedia clip is not bundled and its CC0 declaration does not apply to the replacement. See [`THIRD_PARTY_MEDIA.md`](THIRD_PARTY_MEDIA.md) for the exact permission, source and hash records.
+The repository intentionally excludes prior workshop databases and responses, model checkpoints, detector environments, research corpora, private contributor source files, superseded local-only media, and generated build/cache directories. The two selected contributor image derivatives are included under explicit repository/workshop authorisation confirmed on 29 September 2026; no general reuse licence is granted. Quiz 8 has separate contributor authorisation dated 11 October. See [`THIRD_PARTY_MEDIA.md`](THIRD_PARTY_MEDIA.md) for the current assets' permission, source and hash records.

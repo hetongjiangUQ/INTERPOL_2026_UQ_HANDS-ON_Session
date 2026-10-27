@@ -164,8 +164,8 @@ wc -c /tmp/video-range.body
 ```
 
 The response must be `206`, cover bytes `0-1023`, report a content length of
-`1024`, and write exactly `1024` bytes. Repeat this check for the second MP4 and
-the face-swap WebM under `public/samples/`. The application also has a
+`1024`, and write exactly `1024` bytes. Repeat this check for the other two
+bundled MP4s under `public/samples/`. The application also has a
 browser-side compatibility fallback for direct Wrangler access, but the public
 event path should use Caddy's native range delivery.
 
